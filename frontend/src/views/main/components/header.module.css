@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap');
+.top_bar{
+    background: #FFE391;
+    width: 100%;
+    height: 7vh;
+    display:flex;
+    justify-content:space-between;
+}
+#open_nav{
+    width:15%;
+}
+#open_nav:hover{
+    border-radius: 30px;
+}
+#open_nav:active{
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0,0,0,0.24);
+}
+.left_control{
+    width:33%;
+    display:flex;
+    align-items: center;
+}
+#date_header{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 28px;
+    color: #000000;
+}
+.center_control{
+    align-self: center;
+}
+#search_bar{
+    width:40%;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.3);
+    margin:0;
+    background: #FFD9C3;
+    border-radius: 30px;
+    width:100%;
+    padding-left: 1.5em;
+    
+}
+#search_bar:hover{
+    background-color: white;
+}
+#search_bar:focus{
+    background-color: white;
+    color: black;
+}
+.right_control{
+    width:33%;
+    display:flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right:2em;
+}
+#user_menu{
+    width:15%;
+}
+#user_menu:hover{
+    border-radius: 30px;
+}
+#user_menu:active{
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0,0,0,0.24);
+}
+#prof_pic{
+    display:inline-block;
+    border-radius:50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    width: 213px;
+    height: 213px;
+}
+#account_photo{
+    display:flex;
+    flex-direction:column;
+}
