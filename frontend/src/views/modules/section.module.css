@@ -1,0 +1,43 @@
+#imgs{
+    width: 3.6%;
+}
+.category_name{
+    color: #000000;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 35px;
+    padding-left: 0.5em;
+    margin-right:1em;
+}
+
+.tasks_panel{
+    margin-top:2em;
+    width:100%;
+    height:100%;
+    justify-content: center;
+    align-items: center;
+    display:flex;
+    flex-direction: column;
+    overflow: auto;
+    min-height: 0;
+}
+.task{
+    background: #FFF5FF;
+    border-radius: 30px;
+    width: 60%;
+    margin-bottom:1em;
+    display:flex;
+    align-items: center;
+    padding-left: 1em;
+    justify-content: space-between;
+}
+.task_text{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 35px;
+    color: #000000;
+}

@@ -5,6 +5,9 @@
     height: 7vh;
     display:flex;
     justify-content:space-between;
+    position:relative;
+    z-index:999;
+    overflow-y: hidden;
 }
 #open_nav{
     width:15%;

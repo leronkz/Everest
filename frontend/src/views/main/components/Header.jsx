@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './header.module.css';
+import styles from '../../modules/header.module.css';
 import navsvg from '../../../public/img/nav.svg'
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -111,9 +111,6 @@ function Header(){
                 </Search>
             </div>
             <div className={styles.right_control}>
-                {/* <button id={styles.user_menu} type="button" onclick={handleClick}>
-                    <img id={styles.prof_pic} src={Av} alt="Mateusz Owsiak"/>
-                </button> */}
                 <Tooltip title="Twoje konto">
                     <IconButton
                         onClick={handleClick}
