@@ -2,9 +2,13 @@ import { Box } from '@mui/system';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Section from './components/Section';
-import Task from './components/Task';
 import styles from '../modules/main.module.css';
+import React from 'react';
 function Main(){
+
+    const [category, setCategory] = React.useState('');
+
+    const handleClick = (category) => setCategory(category);
 
     return(
         <Box sx={{
@@ -13,13 +17,11 @@ function Main(){
         }}>
            <header><Header/></header>
            <div className={styles.main}>    
-                <Navbar/>
+                <Navbar handleClick = {handleClick}/>
                 <main>
-                    <Section/>
+                    <Section category={category} img={""}/>
                 </main>
-                {/* <div style={{position:"absolute", width:"60%", height:"70%"}}><Task/></div> */}
             </div>
-
         </Box>
     );
 }
