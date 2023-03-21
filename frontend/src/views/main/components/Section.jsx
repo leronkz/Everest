@@ -1,5 +1,4 @@
 import { Box, Divider, IconButton, Tooltip} from '@mui/material';
-import Dom from '../../../public/img/dom.svg';
 import React, { useState } from 'react';
 import styles from '../../modules/section.module.css';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
@@ -9,9 +8,10 @@ import Checkbox from '@mui/material/Checkbox';
 import CircleIcon from '@mui/icons-material/Circle';
 import Task from './Task';
 import AddIcon from '@mui/icons-material/Add';
-
-
-function Section({category}){
+import Confirmation from './Confirmation';
+import Category from './Category';
+// w zaleznosci od kategori bede pobieral z back'a zadania
+function Section({category, img}){
 
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event) => {
@@ -23,18 +23,26 @@ function Section({category}){
         setVisible(true);
     };
 
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    
+    if(category === '')
+        category = "Wszystkie zadania";
+
     return(
         <Box sx={{
             display:"flex",
             flexDirection:"column",
         }}>
             <Task visible={visible} onClose={()=> setVisible(false)}/>
+            <Confirmation open={open} onClose={()=> setOpen(false)}/>
+            {/* <Category open={open} onClose = {() => setOpen(false)}/> */}
             <Box sx={{
                 display:"flex",
                 alignItems:"center",
             }}>
-                <p className={styles.category_name}>Dom</p> 
-                <img id={styles.imgs} src={Dom}/>
+                <p className={styles.category_name}>{category}</p> 
+                <img id={styles.imgs} src={img}/>
             </Box>
             <Divider/>
 
@@ -59,7 +67,7 @@ function Section({category}){
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Usuń">
-                            <IconButton size="medium">
+                            <IconButton size="medium" onClick={handleOpen}>
                                 <DeleteOutlineOutlinedIcon/>
                             </IconButton>
                         </Tooltip>

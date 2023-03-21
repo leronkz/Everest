@@ -1,18 +1,24 @@
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Box, IconButton,Button } from '@mui/material';
+import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Box, IconButton,Button, Tooltip } from '@mui/material';
 import React from 'react'
 import styles from '../../modules/navbar.module.css';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-import Dom from '../../../public/img/dom.svg';
-import Sport from '../../../public/img/sport.svg';
-import Edukacja from '../../../public/img/edukacja.svg';
-import Praca from '../../../public/img/praca.svg';
-function Navbar(){
+import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
+import Category from './Category';
+let Icon = () => <KeyboardArrowUpOutlinedIcon/>
+function Navbar({handleClick}){
 
-    const manageCategoryList = () =>{
+    const categories = ['Dom','Sport','Praca','Edukacja'];
+    const [visible, setVisible] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
 
-    };
+    const handleOpen = () => setOpen(true);
+
+    const toggleVisible = () => {
+        setVisible((prevVisible) => !prevVisible);
+    };    
+        
+    const iconButtonClass = `${styles.icon_button} ${visible ? '' :styles.icon_button_rotated}`;
+   
     return(
         <div className={styles.navbar}>
             <Drawer
@@ -36,9 +42,9 @@ function Navbar(){
                     <List>
                         {['Wszystkie zadania','Dzisiejsze zadania'].map((text)=>(
                             <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                <ListItemText className={styles.category_text} primary={text}/>
-                            </ListItemButton>
+                                <ListItemButton onClick={()=> handleClick(text)}>
+                                    <ListItemText className={styles.category_text} primary={text}/>
+                                </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
@@ -48,111 +54,43 @@ function Navbar(){
                             justifyContent:"space-between"}}>
                     <p className={styles.text}>Kategorie</p>
                     <Box sx={{display:"flex"}}>
-                        <IconButton
-                            size="medium"
-                        >
-                            <AddOutlinedIcon/>
-                        </IconButton>
-                        <IconButton 
-                            size="medium"
-                            onClick={manageCategoryList}
-                        >
-                            <KeyboardArrowDownOutlinedIcon/>
-                        </IconButton>
+                        <Tooltip title="Dodaj">
+                            <IconButton onClick={handleOpen}
+                                size="medium"
+                            >
+                                <AddOutlinedIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title= {visible ? "Schowaj" : "Pokaż"}>
+                            <IconButton className = {iconButtonClass}
+                                size="medium"
+                                onClick={toggleVisible}
+                            >
+                            <Icon/>
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 </Box>
                 <Divider/>
-
-                <Box sx={{
+                <Box
+                    sx={{
                     display:"flex",
                     flexDirection:"column",
-                    visibility:"visible"
+                    visibility: visible ? "visible" : "hidden"
                 }}>
-                
-                    <button className={styles.category_btn} type="button">
-                        <Box sx={{
-                            display:"flex",
-                            flexDirection:"row",
-                            alignItems:"center",
-                            justifyContent:"space-between",
-                            ml: "0.5em",
-                        }}>
-                            
-                            <Box sx={{
-                                display:"flex",
-                                alignItems:"center"
-                            }}>
-                                <RadioButtonUncheckedOutlinedIcon/>
-                                <p className={styles.category_text}>Dom</p>
-                            </Box>
-                            <img className={styles.imgs} src={Dom}/>
-                        </Box>
-                    </button>
-
-                    <button className={styles.category_btn} type="button">
-                        <Box sx={{
-                            display:"flex",
-                            flexDirection:"row",
-                            alignItems:"center",
-                            justifyContent:"space-between",
-                            ml: "0.5em",
-                        }}>
-                            
-                            <Box sx={{
-                                display:"flex",
-                                alignItems:"center"
-                            }}>
-                                <RadioButtonUncheckedOutlinedIcon/>
-                                <p className={styles.category_text}>Sport</p>
-                            </Box>
-                            <img className={styles.imgs} src={Sport}/>
-                        </Box>
-                    </button>
-
-                    <button className={styles.category_btn} type="button">
-                        <Box sx={{
-                            display:"flex",
-                            flexDirection:"row",
-                            alignItems:"center",
-                            justifyContent:"space-between",
-                            ml: "0.5em",
-                        }}>
-                            
-                            <Box sx={{
-                                display:"flex",
-                                alignItems:"center"
-                            }}>
-                                <RadioButtonUncheckedOutlinedIcon/>
-                                <p className={styles.category_text}>Praca</p>
-                            </Box>
-                            <img className={styles.imgs} src={Praca}/>
-                        </Box>
-                    </button>
-
-                    <button className={styles.category_btn} type="button">
-                        <Box sx={{
-                            display:"flex",
-                            flexDirection:"row",
-                            alignItems:"center",
-                            justifyContent:"space-between",
-                            ml: "0.5em",
-                        }}>
-                            
-                            <Box sx={{
-                                display:"flex",
-                                alignItems:"center"
-                            }}>
-                                <RadioButtonUncheckedOutlinedIcon/>
-                                <p className={styles.category_text}>Edukacja</p>
-                            </Box>
-                            <img className={styles.imgs} src={Edukacja}/>
-                        </Box>
-                    </button>
+                    <List>
+                        {categories.map((text)=>(
+                            <ListItem key={text} disablePadding >
+                                <ListItemButton onClick={()=> handleClick(text)}>
+                                    <ListItemText className={styles.category_text} primary={text}/>
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
                 </Box>
             </Drawer>
         </div>
     );
-
 }
 
 export default Navbar;

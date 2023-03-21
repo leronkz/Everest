@@ -1,6 +1,5 @@
-import { Divider, IconButton, Tooltip, Box, InputLabel, MenuItem, FormControl} from '@mui/material';
+import { Divider, IconButton, Tooltip, Box, MenuItem } from '@mui/material';
 import React from 'react';
-import {useState} from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from '../../modules/task.module.css';
 import TextField from '@mui/material/TextField';
