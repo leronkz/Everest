@@ -5,7 +5,6 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import {createTheme} from '@mui/material/styles';
-import Av from '../../../public/upload/profile-picture.svg';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,9 +14,9 @@ import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Photo from '../../../public/upload/zdjecie.jpg';
-import { Divider } from '@mui/material';
+import { Divider, Box } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-
+import {Link} from 'react-router-dom';
 function getDate(){
     let date = new Date(),
     currYear = date.getFullYear(),
@@ -89,6 +88,7 @@ function Header(){
     return (
         <div className={styles.top_bar}>
             <div className={styles.left_control}>
+                  <Link to="/main">
                     <IconButton
                         size='large'
                         sx={{ml: 1,
@@ -97,6 +97,7 @@ function Header(){
                     >
                       <HomeIcon />
                     </IconButton>
+                  </Link>
                 <p id={styles.date_header}>Dziś jest: {todaysDate} </p>
             </div> 
             <div className={styles.center_control}>
@@ -155,22 +156,31 @@ function Header(){
                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
-                    <MenuItem onClick={handleClose}>
-                         <img id={styles.prof_pic} src={Photo} />
-                    </MenuItem>
+                  <Link to="/account">
+                      <MenuItem onClick={handleClose}>
+                        <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
+                            <img id={styles.prof_pic} src={Photo} />
+                            <p>Konto</p>
+                        </Box>
+                      </MenuItem>
+                    </Link>
                     <Divider/>
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <Settings/>
-                        </ListItemIcon>
-                         Ustawienia
-                    </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <Logout/> 
-                        </ListItemIcon>
-                        Wyloguj się 
-                    </MenuItem>
+                    <Link to="/settings">
+                      <MenuItem onClick={handleClose}>
+                          <ListItemIcon>
+                              <Settings/>
+                          </ListItemIcon>
+                          Ustawienia
+                      </MenuItem>
+                    </Link>
+                    <Link to="/login">
+                      <MenuItem>
+                          <ListItemIcon>
+                              <Logout/> 
+                          </ListItemIcon>
+                          Wyloguj się 
+                      </MenuItem>
+                    </Link>
                 </Menu>
             </div>
         </div>
