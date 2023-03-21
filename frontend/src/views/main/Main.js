@@ -1,8 +1,8 @@
-import { CssBaseline, Typography, AppBar } from '@mui/material';
 import { Box } from '@mui/system';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Section from './components/Section';
+import Task from './components/Task';
 import styles from '../modules/main.module.css';
 function Main(){
 
@@ -17,6 +17,7 @@ function Main(){
                 <main>
                     <Section/>
                 </main>
+                {/* <div style={{position:"absolute", width:"60%", height:"70%"}}><Task/></div> */}
             </div>
 
         </Box>

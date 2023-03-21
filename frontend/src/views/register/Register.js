@@ -1,7 +1,7 @@
 import  logo  from '../../public/img/logo.png';
 import  logo2 from '../../public/img/logo2.svg';
 import styles from '../modules/register.module.css';
-
+import {Link} from "react-router-dom";
 function Register(){
     return(
         <div className={styles.container}>
@@ -18,7 +18,7 @@ function Register(){
             <div className={styles.registerPanel}>
                 <p className={styles.firstText}>Masz już konto?</p>
                 <p className={styles.secondText}>Zaloguj się i korzystaj z aplikacji!</p>
-                <button id={styles.loginButton} type="button">Zaloguj się</button>
+                <Link className={styles.link} to="/login"><button id={styles.loginButton} type="button">Zaloguj się</button></Link>
                 <img id={styles.logo2} src={logo2}/>
             </div>
     </div>
