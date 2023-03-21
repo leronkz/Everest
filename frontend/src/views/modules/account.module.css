@@ -1,0 +1,79 @@
+.container{
+    width:100vw;
+    height:100vh;
+}
+.main{
+   width:100%; 
+   display:flex;
+   flex-direction: column;
+   align-items: center;
+   margin-top: 5ch;
+}
+
+.profile_picture{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    margin-bottom:5ch;
+}
+.picture{
+    display: inline-block;
+    width:300px;
+    height: 300px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+.account_form{
+    width:30%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form_text{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+
+    color: #000000;
+}
+#name, #surname, #birthday{
+    text-align: center;
+    width:70%;
+    height:2em;
+    margin-bottom: 1em;
+    border: 1px solid #000000;
+    font-size:20px;
+}
+#change_button{
+    width:50%;
+    height: 2em;
+    background: #FAF7FF;
+    border: 2px solid #1BF808;
+    border-radius: 30px;
+    margin-bottom:1em;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+
+    color: #2CA800;
+}
+#change_button:hover{
+    background: #55db52;
+    color: white;
+}
+.account_data{
+    background: #FFF5FF;
+    border: 1px solid #000000;
+    border-radius: 30px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}

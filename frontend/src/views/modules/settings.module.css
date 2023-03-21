@@ -1,0 +1,80 @@
+.container{
+    width:100vw;
+    height:100vh;
+}
+.main{
+   width:100%; 
+   display:flex;
+   flex-direction: column;
+   align-items: center;
+   margin-top: 5ch;
+}
+.change_form{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: #FFF5FF;
+    border: 1px solid #000000;
+    border-radius: 30px;
+
+    width:40%;
+}
+.form_text{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+
+    color: #000000;
+}
+#current_password, #new_password, #repeat_password{
+    text-align: center;
+    width:70%;
+    height:2em;
+    margin-bottom: 1em;
+    border: 1px solid #000000;
+    font-size:20px;
+}
+#change_button{
+    width:50%;
+    height: 2em;
+    background: #FAF7FF;
+    border: 2px solid #1BF808;
+    border-radius: 30px;
+    margin-bottom:1em;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+
+    color: #2CA800;
+}
+#change_button:hover{
+    background: #55db52;
+    color: white;
+}
+#delete_account_btn{
+    
+    width:20%;
+    height:2em;
+    background: #FAF7FF;
+    border: 2px solid #F80808;
+    border-radius: 30px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 28px;
+    margin-top:inherit;
+    color: #F11717;
+}
+
+#delete_account_btn:hover{
+    background: #e03d3d;
+    color:white;
+}
