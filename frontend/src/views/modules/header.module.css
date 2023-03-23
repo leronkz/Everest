@@ -2,7 +2,7 @@
 .top_bar{
     background: #FFE391;
     width: 100%;
-    height: 7vh;
+    /*height: 7vh;*/
     display:flex;
     justify-content:space-between;
     position:relative;
@@ -34,27 +34,6 @@
 }
 .center_control{
     align-self: center;
-}
-#search_bar{
-    width:40%;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    color: rgba(0, 0, 0, 0.3);
-    margin:0;
-    background: #FFD9C3;
-    border-radius: 30px;
-    width:100%;
-    padding-left: 1.5em;
-    
-}
-#search_bar:hover{
-    background-color: white;
-}
-#search_bar:focus{
-    background-color: white;
-    color: black;
 }
 .right_control{
     width:33%;

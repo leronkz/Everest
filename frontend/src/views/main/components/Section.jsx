@@ -1,28 +1,24 @@
 import { Box, Divider, IconButton, Tooltip} from '@mui/material';
 import React, { useState } from 'react';
 import styles from '../../modules/section.module.css';
-import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import Checkbox from '@mui/material/Checkbox';
-import CircleIcon from '@mui/icons-material/Circle';
 import AddTask from './AddTask';
 import AddIcon from '@mui/icons-material/Add';
 import Confirmation from './Confirmation';
 import Task from './Task';
-import Category from './Category';
+import Category from "./Category";
 // w zaleznosci od kategori bede pobieral z back'a zadania
-function Section({category, img}){
+function Section({category, img, isOpenCategory, handleCloseCategory}){
 
+    // Do dodawania zadan
     const [visible, setVisible] = useState(false);
     const handleClick = () => {
         setVisible(true);
     };
 
-
+    //Do obsługi popup'u z usuwaniem
     const [open, setOpen] = useState(false);
     const handleDelete = () => setOpen(true);
-    
+
     if(category === '')
         category = "Wszystkie zadania";
 
@@ -32,7 +28,7 @@ function Section({category, img}){
             flexDirection:"column",
         }}>
             <AddTask visible={visible} onClose={()=> setVisible(false)}/>
-            {/* <Category open={open} onClose = {() => setOpen(false)}/> */}
+            <Category open={isOpenCategory} onClose = {handleCloseCategory}/>
             <Confirmation open={open} onClose={()=> setOpen(false)}/>
             <Box sx={{
                 display:"flex",

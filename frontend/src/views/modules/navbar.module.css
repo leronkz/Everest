@@ -1,6 +1,6 @@
 .navbar{
     width:305px;
-    gap: var(--reactist-spacing-large);
+    /*gap: var(--reactist-spacing-large);*/
     height: 100vh;
     background:#FFE8FC;
 }

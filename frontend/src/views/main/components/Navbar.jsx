@@ -1,17 +1,14 @@
-import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Box, IconButton,Button, Tooltip } from '@mui/material';
+import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Box, IconButton, Tooltip } from '@mui/material';
 import React from 'react'
 import styles from '../../modules/navbar.module.css';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-import Category from './Category';
+
 let Icon = () => <KeyboardArrowUpOutlinedIcon/>
-function Navbar({handleClick}){
+function Navbar({handleClick, handleOpen}){
 
     const categories = ['Dom','Sport','Praca','Edukacja'];
     const [visible, setVisible] = React.useState(true);
-    const [open, setOpen] = React.useState(false);
-
-    const handleOpen = () => setOpen(true);
 
     const toggleVisible = () => {
         setVisible((prevVisible) => !prevVisible);
