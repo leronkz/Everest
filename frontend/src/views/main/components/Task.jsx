@@ -1,75 +1,63 @@
-import { Divider, IconButton, Tooltip, Box, MenuItem } from '@mui/material';
 import React from 'react';
-import CloseIcon from '@mui/icons-material/Close';
 import styles from '../../modules/task.module.css';
-import TextField from '@mui/material/TextField';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Select from '@mui/material/Select';
+import { Box, IconButton, Tooltip} from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+import CircleIcon from '@mui/icons-material/Circle';
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+function Task({title, description, priority, date, handleDelete}){
 
-// Kategorie pobierane z back'a albo wysylane przez props
-
-function Task(props){
-
-    const {visible, onClose} = props;
-    const [value, setValue] = React.useState('low');
-    const handlePriorityChange = (event) => {
-      setValue(event.target.value);
+    const [checked, setChecked] = React.useState(false);
+    const handleChange = (event) => {
+      setChecked(event.target.checked);
     };
+    const [visible, setVisible] = React.useState(false);
 
-    const [category, setCategory] = React.useState('');
-    const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
-    };
-    if(!visible)
-        return null;
+    const iconButtonClass = `${styles.icon_button} ${visible ? styles.icon_button_rotated:''}`;
+    let priority_value = "Niski";
+    if(priority === "green")
+        priority_value="Niski";
+    else if(priority === "orange")
+        priority_value="Średni";
+    else
+        priority_value="Wysoki";
     return(
-
-        <Box className={styles.add_task_container}>
-            <Tooltip title="Zamknij">
-                <IconButton size="large" sx={{alignSelf:"flex-end"}} onClick={onClose}><CloseIcon/></IconButton>
-            </Tooltip>
-            <p className={styles.text}>Dodaj nowe zadanie</p>  
-            <Divider sx={{width:"100%", borderBottomWidth:2}}/> 
-
-            <Box className={styles.add_task_form} component="form">
-
-                <TextField id='task-title' label="Nazwa zadania.." variant="standard" sx={{width:"100%", mb:"2ch"}} />
-                <TextField id="task-description" label="Opis zadania.." multiline maxRows={3} sx={{width:"100%"}}/>
-
-                <Box className={styles.form_wrapper}>
-
-                    <Box className={styles.task_deadline}>
-                        <p className={styles.secondary_text} style={{marginRight:"2em"}}>Termin zadania: </p>
-                        <input id={styles.task_date} type="date"/>
-                    </Box>
-
-                    <Box className={styles.task_priority}>
-                        <p className={styles.secondary_text}>Priorytet:</p>
-                        
-                        <RadioGroup value={value} onChange={handlePriorityChange}>
-                            <FormControlLabel value="low" control={<Radio sx={{color:"green", '&.Mui-checked': {color:"green"}}}/>} label="Niski"/>
-                            <FormControlLabel value="medium" control={<Radio sx={{color:"orange", '&.Mui-checked': {color:"orange"}}}/>} label="Średni"/>
-                            <FormControlLabel value="high" control={<Radio sx={{color:"red", '&.Mui-checked': {color:"red"}}}/>} label="Wysoki"/>
-                        </RadioGroup>
-                    </Box>
-
-                    <Box className={styles.task_category}>
-                        <p className={styles.secondary_text}>Kategoria:</p>
-                        <Select 
-                            value={category}
-                            onChange={handleCategoryChange}
-                            displayEmpty
-                        >
-                            <MenuItem value={"Dom"}>Dom</MenuItem>
-                            <MenuItem value={"Sport"}>Sport</MenuItem>
-                            <MenuItem value={"Praca"}>Praca</MenuItem>
-                            <MenuItem value={"Edukacja"}>Edukacja</MenuItem>
-                        </Select>
-                    </Box>
+        <Box className={styles.task}>
+            <Box className={styles.task_header}>
+                <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center"}}>
+                    <Checkbox checked={checked} onChange={handleChange} inputProps={{'aria-label':'controlled'} }/>
+                    <p className={styles.task_text}>{title}</p>
                 </Box>
-                <button id={styles.task_save_btn} type="button">Zapisz</button>
+                <CircleIcon sx={{color: priority, border:"2px solid", borderColor: priority, borderRadius:"50%"}}/>
+                <Box>
+                    <Tooltip title= {visible ? "Zwiń" : "Pokaż"}>
+                        <IconButton 
+                            size="medium"
+                            onClick = {() => setVisible(!visible)}
+                        >
+                        <KeyboardArrowDownOutlinedIcon className={iconButtonClass}/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Edytuj">
+                        <IconButton size="medium">
+                            <EditOutlinedIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Usuń">
+                        <IconButton size="medium" onClick={handleDelete}>
+                            <DeleteOutlineOutlinedIcon/>
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+            </Box>
+            <Box className={styles.task_body} sx={{display: visible ? "inline-block" : "none"}}>
+                <p className={styles.task_body_text}>{(description==="" ? "Brak opisu zadania" : description)}</p>
+                <p className={styles.task_body_text}>Termin: {date}</p>
+                <Box sx={{display:"flex", alignItems:"center", width:"100%"}}>
+                    <p className={styles.task_body_text}>Priorytet: {priority_value}</p>
+                    <CircleIcon sx={{ml:"1em",color: priority, border:'2px solid',borderRadius:"50%", borderColor: priority}}/>
+                </Box>
             </Box>
         </Box>
     );

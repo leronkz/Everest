@@ -6,25 +6,22 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Checkbox from '@mui/material/Checkbox';
 import CircleIcon from '@mui/icons-material/Circle';
-import Task from './Task';
+import AddTask from './AddTask';
 import AddIcon from '@mui/icons-material/Add';
 import Confirmation from './Confirmation';
+import Task from './Task';
 import Category from './Category';
 // w zaleznosci od kategori bede pobieral z back'a zadania
 function Section({category, img}){
-
-    const [checked, setChecked] = React.useState(true);
-    const handleChange = (event) => {
-      setChecked(event.target.checked);
-    };
 
     const [visible, setVisible] = useState(false);
     const handleClick = () => {
         setVisible(true);
     };
 
+
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleDelete = () => setOpen(true);
     
     if(category === '')
         category = "Wszystkie zadania";
@@ -34,9 +31,9 @@ function Section({category, img}){
             display:"flex",
             flexDirection:"column",
         }}>
-            <Task visible={visible} onClose={()=> setVisible(false)}/>
-            <Confirmation open={open} onClose={()=> setOpen(false)}/>
+            <AddTask visible={visible} onClose={()=> setVisible(false)}/>
             {/* <Category open={open} onClose = {() => setOpen(false)}/> */}
+            <Confirmation open={open} onClose={()=> setOpen(false)}/>
             <Box sx={{
                 display:"flex",
                 alignItems:"center",
@@ -45,36 +42,12 @@ function Section({category, img}){
                 <img id={styles.imgs} src={img}/>
             </Box>
             <Divider/>
-
-            <div className={styles.tasks_panel}>
+            {/* Dodac overflow gdy jest duzo zdan */}
+            <div className={styles.tasks_panel}> 
+                <Task title="Posprzątać cały dom" description="Posprzątać kuchnię, łazienkę..." priority="orange" date="25.03.2023" handleDelete={handleDelete} />
+                <Task title="Wynieść śmieci" description="" priority="red" date="23.03.2023" handleDelete={handleDelete} />
                 <Box className={styles.task}>
-                    <Box sx={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-                        <Checkbox checked={checked} onChange={handleChange} inputProps={{'aria-label':'controlled'} }/>
-                        <p className={styles.task_text}>Tytuł zadania</p>
-                    </Box>
-                    <CircleIcon sx={{color:"red",border:"2px solid black",borderRadius:"50%"}}/>
-                    <Box>
-                        <Tooltip title="Rozwiń">
-                            <IconButton 
-                                size="medium"
-                            >
-                            <KeyboardArrowDownOutlinedIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Edytuj">
-                            <IconButton size="medium">
-                                <EditOutlinedIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Usuń">
-                            <IconButton size="medium" onClick={handleOpen}>
-                                <DeleteOutlineOutlinedIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                </Box>
-                <Box className={styles.task}>
-                    <Box sx={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+                    <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center", width:"100%"}}>
                         <Tooltip title="Dodaj">
                             <IconButton size="medium" onClick={handleClick}>
                                 <AddIcon/>
