@@ -1,6 +1,6 @@
 import { Box, Divider, IconButton, Tooltip} from '@mui/material';
 import React, { useState } from 'react';
-import styles from '../../modules/section.module.css';
+import styles from '../modules/section.module.css';
 import AddTask from './AddTask';
 import AddIcon from '@mui/icons-material/Add';
 import Confirmation from './Confirmation';

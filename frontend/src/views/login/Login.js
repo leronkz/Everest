@@ -1,6 +1,6 @@
 import  logo  from '../../public/img/logo.png';
 import  logo2 from '../../public/img/logo2.svg';
-import styles from '../modules/login.module.css';
+import styles from '../../public/modules/login.module.css';
 import { Link }from "react-router-dom";
 function Login() {
     return (

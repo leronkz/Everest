@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from '../modules/settings.module.css';
-import Header from '../main/components/Header';
-import Confirmation from '../main/components/Confirmation';
+import styles from '../../public/modules/settings.module.css';
+import Header from '../../public/components/Header';
+import Confirmation from '../../public/components/Confirmation';
 function Settings(){
 
     const [open, setOpen] = React.useState(false);

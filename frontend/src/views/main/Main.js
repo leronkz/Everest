@@ -1,9 +1,9 @@
-import Header from './components/Header';
-import Navbar from './components/Navbar';
-import Section from './components/Section';
-import styles from '../modules/main.module.css';
+import Header from '../../public/components/Header';
+import Navbar from '../../public/components/Navbar';
+import Section from '../../public/components/Section';
+import styles from '../../public/modules/main.module.css';
 import React from 'react';
-function Main(){
+function Main({photo}){
 
     const [category, setCategory] = React.useState('');
     const [addCategory, setAddCategory] = React.useState(false);
@@ -12,7 +12,7 @@ function Main(){
 
     return(
          <div className={styles.container}>
-           <header style={{verticalAlign:"top"}}><Header/></header>
+           <header style={{verticalAlign:"top"}}><Header photo={photo}/></header>
            <div className={styles.main}>    
                 <Navbar handleClick = {handleClick} handleOpen={handleOpen}/>
                 <main>

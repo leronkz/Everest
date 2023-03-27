@@ -1,6 +1,6 @@
 import React from 'react'
-import styles from '../../modules/header.module.css';
-import navsvg from '../../../public/img/nav.svg'
+import styles from '../modules/header.module.css';
+import navsvg from '../img/nav.svg'
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,7 +13,7 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
-import Photo from '../../../public/upload/zdjecie.jpg';
+import BasicPhoto from '../upload/basic_photo.svg';
 import { Divider, Box } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import {Link} from 'react-router-dom';
@@ -76,7 +76,7 @@ const Search = styled('div')(({ theme }) => ({
   }));
   
 
-function Header(){
+function Header({photo}){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -85,6 +85,9 @@ function Header(){
     const handleClose = () => {
         setAnchorEl(null);
     };
+    if(photo === '')
+        photo = BasicPhoto;
+
     return (
         <div className={styles.top_bar}>
             <div className={styles.left_control}>
@@ -159,7 +162,7 @@ function Header(){
                   <Link to="/account">
                       <MenuItem onClick={handleClose}>
                         <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-                            <img id={styles.prof_pic} src={Photo} />
+                            <img id={styles.prof_pic} src={photo} />
                             <p>Konto</p>
                         </Box>
                       </MenuItem>

@@ -1,7 +1,7 @@
 import { Divider, IconButton, Tooltip, Box, MenuItem } from '@mui/material';
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import styles from '../../modules/add_task.module.css';
+import styles from '../modules/add_task.module.css';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';

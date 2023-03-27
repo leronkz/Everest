@@ -1,7 +1,7 @@
 import { Button, Tooltip, Divider, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import styles from '../../modules/category.module.css';
+import styles from '../modules/category.module.css';
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';

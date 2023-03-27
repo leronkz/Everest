@@ -1,19 +1,33 @@
 import React from 'react';
-import styles from '../modules/account.module.css';
-import Header from '../main/components/Header';
+import styles from '../../public/modules/account.module.css';
+import Header from '../../public/components/Header';
 import Button from '@mui/material/Button';
-function Account(){
-
+import BasicPhoto from './basic_photo.svg';
+function Account({photo}){
+    const [photo_url, setPhotoUrl] = React.useState(photo);
+    const previewPhoto = (event) =>{
+        const choseFile = event.target.files[0];
+        if(choseFile){
+            const reader = new FileReader();
+            reader.addEventListener('load',function(){
+                setPhotoUrl(reader.result);
+            })
+            reader.readAsDataURL(choseFile);
+        }
+    }
+    if(photo_url === ''){
+        setPhotoUrl(BasicPhoto);
+    }
     return(
         <div className={styles.container}>
             <header><Header/></header>
             <main className={styles.main}>
                 <form className={styles.account_form} action="" encType='multipart/form-data'>
                     <div className={styles.profile_picture}>
-                            <div className={styles.picture} style={{backgroundImage:"url('../../public/upload/zdjecie.jpg')"}}></div>
+                            <div className={styles.picture} style={{backgroundImage:`url(${photo_url})`}}></div>
                             <Button variant="contained" component="label">
                                 Wybierz zdjęcie
-                                <input hidden accept="image/*" type="file" />
+                                <input hidden accept="image/*" type="file" onChange={previewPhoto}/>
                             </Button>
                     </div>
                     <div className={styles.account_data}>

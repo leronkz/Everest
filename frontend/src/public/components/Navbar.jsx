@@ -1,6 +1,6 @@
 import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Box, IconButton, Tooltip } from '@mui/material';
 import React from 'react'
-import styles from '../../modules/navbar.module.css';
+import styles from '../modules/navbar.module.css';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 

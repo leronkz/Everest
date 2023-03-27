@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../modules/task.module.css';
+import styles from '../modules/task.module.css';
 import { Box, IconButton, Tooltip} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import CircleIcon from '@mui/icons-material/Circle';
