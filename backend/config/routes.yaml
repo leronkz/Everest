@@ -1,0 +1,8 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+task_save:
+    path: /api/task/save
+    controller: App\Controller\TaskController::index
+    methods: [POST]
