@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Task
  *
  * @ORM\Table(name="task", indexes={@ORM\Index(name="task_category_ID_category_fk", columns={"ID_category"}), @ORM\Index(name="task_user_ID_user_fk", columns={"ID_user"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
  */
 class Task
 {

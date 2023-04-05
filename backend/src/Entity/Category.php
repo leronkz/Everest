@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Category
  *
  * @ORM\Table(name="category")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
 class Category
 {
@@ -27,6 +27,23 @@ class Category
      * @ORM\Column(name="category_name", type="string", length=100, nullable=false)
      */
     private $categoryName;
+
+    public function getIdCategory(): ?int
+    {
+        return $this->idCategory;
+    }
+
+    public function getCategoryName(): ?string
+    {
+        return $this->categoryName;
+    }
+
+    public function setCategoryName(string $categoryName): self
+    {
+        $this->categoryName = $categoryName;
+
+        return $this;
+    }
 
 
 }
