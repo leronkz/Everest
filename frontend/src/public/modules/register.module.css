@@ -13,15 +13,17 @@
 
 .container{
     width:70%;
+    height:80%;
     display:grid;
     grid-template-columns: 2fr 1fr;
     -webkit-box-shadow: 4px 7px 30px 5px rgba(66, 68, 90, 1);
     -moz-box-shadow: 4px 7px 30px 5px rgba(66, 68, 90, 1);
     box-shadow: 4px 7px 30px 5px rgba(66, 68, 90, 1);
+    margin:auto;
 }
 
 .loginPanel{
-    height:100vh;
+    height:100%;
     background: #FFF5FF;
     text-align:center;
     display:flex;
@@ -121,4 +123,20 @@ input{
 }
 .link{
     width:100%;
+}
+.errorText{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    width:100%;
+    color: red;
+}
+.successText{
+    font-family: 'Poppins';
+    font-style:normal;
+    font-weight: 400;
+    font-size: 18px;
+    width: 100%;
+    color: green;
 }
