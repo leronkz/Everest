@@ -1,16 +1,20 @@
-import  logo  from '../../public/img/logo.png';
-import  logo2 from '../../public/img/logo2.svg';
+import  mainLogo  from '../../public/img/logo.png';
+import  sideLogo from '../../public/img/logo2.svg';
 import styles from '../../public/modules/register.module.css';
 import {Link} from "react-router-dom";
 import React from 'react';
 import axios from 'axios';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 function Register(){
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [repeatPassword, setRepeatPassword] = React.useState('');
-
+    const [validationErrors, setValidationErrors] = React.useState([]);
+    const [validationSuccess, setValidationSuccess] = React.useState([]);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [spinner, setSpinner] = React.useState(false);
     const handleEmailChange = (event) =>{
         setEmail(event.target.value);
         console.log(email);
@@ -23,45 +27,71 @@ function Register(){
         setRepeatPassword(event.target.value);
         console.log(repeatPassword);
     }
-
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const data= {
-            email: email,
-            password: password
-        };
+        setValidationErrors([]);
+        setValidationSuccess([]);
+        if(password === repeatPassword) {
 
-        axios.post('http://127.0.0.1:8000/api/create',data, {
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
-            .then(response => {
-                console.log(response.data.message);
+            setSpinner(true);
+            setValidationErrors({});
+            e.preventDefault();
+            setIsSubmitting(true);
+            const data = {
+                email: email,
+                password: password
+            };
+            axios.post('http://127.0.0.1:8000/api/register', data, {
+                headers: {
+                    'Content-type': 'application/json'
+                }
             })
-            .catch(error=>{
-                console.log(error);
-            })
+                .then(response => {
+                    setSpinner(false);
+                    setIsSubmitting(false);
+                    if (response.data !== undefined) {
+                        setValidationSuccess(response.data);
+                    }
+                })
+                .catch(error => {
+                    setSpinner(false);
+                    setIsSubmitting(false);
+                    if (error.response.data !== undefined) {
+                        setValidationErrors(error.response.data);
+                        setValidationErrors([{message:"Podany adres email jest już zajęty"}])
+                    }
+                })
+        }
+        else{
+            e.preventDefault();
+            setValidationErrors([{message: "Podane hasła nie są takie same"}]);
+        }
     }
 
     return(
         <div className={styles.main}>
             <div className={styles.container}>
                 <div className={styles.loginPanel}>
-                    <img id={styles.logo} src={logo}/>
+                    <img id={styles.logo} src={mainLogo} alt="Logo"/>
                     <p className={styles.mainText}>Założ konto już teraz</p>
                     <form className={styles.loginForm} onSubmit={handleSubmit}>
-                        <input id={styles.emailInput} placeholder="email" type="email" name="email" onChange={handleEmailChange} required/>
-                        <input id={styles.passwordInput} placeholder="haslo" type="password" name="password" onChange={handlePasswordChange} required/>
-                        <input id={styles.repeatPasswordInput} placeholder="powtorz haslo" type="password" name="repeat_password" onChange={handleRepeatPasswordChange} required/>
-                        <button id={styles.registerButton} type="submit">Załóż konto</button>
+                        {Object.keys(validationErrors).length !==0 &&
+                            <p className={styles.errorText}>{validationErrors[0].message}</p>
+                        }
+                        {Object.keys(validationSuccess).length !==0 &&
+                            <p className={styles.successText}>Konto zostało pomyślnie utworzone</p>
+                        }
+                        <input id={styles.emailInput} placeholder="email" type="email"  onChange={handleEmailChange} required/>
+                        <input id={styles.passwordInput} placeholder="haslo" type="password"  onChange={handlePasswordChange} required/>
+                        <input id={styles.repeatPasswordInput} placeholder="powtorz haslo" type="password"  onChange={handleRepeatPasswordChange} required/>
+                        {spinner && (<Box sx={{mt:"2ch", display:"flex", justifyContent:"center"}}><CircularProgress/></Box>)}
+                        <button id={styles.registerButton} type="submit" disabled={isSubmitting}>Załóż konto</button>
                      </form>
                 </div>
                 <div className={styles.registerPanel}>
                     <p className={styles.firstText}>Masz już konto?</p>
                     <p className={styles.secondText}>Zaloguj się i korzystaj z aplikacji!</p>
                     <Link className={styles.link} to="/login"><button id={styles.loginButton} type="button">Zaloguj się</button></Link>
-                    <img id={styles.logo2} src={logo2}/>
+                    <img id={styles.logo2} src={sideLogo} alt="Logo"/>
                 </div>
             </div>
         </div>
