@@ -26,7 +26,6 @@ function Login() {
         if(localStorage.getItem('token') !== "" && localStorage.getItem('token') != null){
             navigate('/main');
         }
-        // console.log(localStorage.getItem('token'))
     },[])
 
     const handleSubmit = (e) => {
@@ -46,7 +45,6 @@ function Login() {
             .then(response => {
                 setSpinner(false);
                 setIsSubmitting(false);
-                // console.log(response.data.token);
                 localStorage.setItem('token', response.data.token);
                 navigate("/main");
             })
@@ -54,7 +52,6 @@ function Login() {
                 setSpinner(false);
                 setIsSubmitting(false);
                 if(error.response.data !== undefined){
-                    // console.log(error.response.data);
                     setValidationErrors(error.response.data);
                 }
             });
