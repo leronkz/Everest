@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 
 /**
@@ -16,22 +18,12 @@ use App\Entity\User;
 
 class UserController extends AbstractController
 {
-    public function hash_password(string $password): string{
-        $hash = password_hash($password, PASSWORD_BCRYPT);
-        return $hash;
-    }
+    #[Route('/api/user', name:'get_user', methods: 'GET')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function getUserData(): JsonResponse{
 
-    #[Route('/create', name: "new_user", methods: 'POST')]
-    public function newUser(ManagerRegistry $doctrine, Request $request): Response
-    {
-        $data = json_decode($request->getContent(),true);
-        $entityManager = $doctrine->getManager();
-        $user = new User();
-        $user->setEmail($data['email']);
-        $user->setPassword($this->hash_password($data['password']));
+        $user = $this->getUser();
 
-        $entityManager->persist($user);
-        $entityManager->flush();
-        return $this->json('Rejestracja przebiegła pomyślnie, możesz się teraz zalogować na swoje konto');
+        return new JsonResponse(['user' => $user], Response::HTTP_OK);
     }
 }
