@@ -26,6 +26,19 @@ class UserDataRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($userData);
         $this->getEntityManager()->flush();
     }
+
+    public function getUserData(User $user): Array{
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('ud.name', 'ud.surname', 'ud.birthDate','ud.image')
+            ->from(UserData::class, 'ud')
+            ->join(User::class,'u','ud.idUser = u.idUser')
+            ->andWhere('u.idUser = :ID_user')
+            ->setParameter('ID_user',$user)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+    }
 //    public function remove(User $entity, bool $flush = false): void
 //    {
 //        $this->getEntityManager()->remove($entity);

@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use App\Entity\UserData;
 
 /**
  * @Route("/api", name="api_")
@@ -20,10 +21,9 @@ class UserController extends AbstractController
 {
     #[Route('/api/user', name:'get_user', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
-    public function getUserData(): JsonResponse{
-
+    public function getUserData(ManagerRegistry $doctrine): JsonResponse{
         $user = $this->getUser();
-
-        return new JsonResponse(['user' => $user], Response::HTTP_OK);
+        $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
+        return $this->json($userData,200,['Content-type: application/json']);
     }
 }
