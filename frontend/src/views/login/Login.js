@@ -23,9 +23,10 @@ function Login() {
     }
 
     useEffect(()=>{
-        if(localStorage.getItem('token') !== "" && localStorage.getItem('token') != null){
+        if(localStorage.getItem('token') !== '' && localStorage.getItem('token') != null){
             navigate('/main');
         }
+        console.log(localStorage.getItem('token'));
     },[])
 
     const handleSubmit = (e) => {
