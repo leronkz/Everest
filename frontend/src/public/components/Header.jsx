@@ -1,7 +1,6 @@
 import React from 'react'
 import styles from '../modules/header.module.css';
-import navsvg from '../img/nav.svg'
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import {createTheme} from '@mui/material/styles';
@@ -13,15 +12,13 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
-import BasicPhoto from '../upload/basic_photo.svg';
-import { Divider, Box } from '@mui/material';
+import { Divider } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import {Link} from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 function getDate(){
-    let date = new Date(),
-    currYear = date.getFullYear(),
-    currMonth = date.getMonth(),
-    currDay = date.getDate();
+    let date = new Date();
     return date;
 }
 
@@ -76,7 +73,7 @@ const Search = styled('div')(({ theme }) => ({
   }));
   
 
-function Header({photo}){
+function Header({logoutAction,name}){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -85,9 +82,10 @@ function Header({photo}){
     const handleClose = () => {
         setAnchorEl(null);
     };
-    if(photo === '')
-        photo = BasicPhoto;
 
+    const handleLogout = () => {
+        logoutAction();
+    }
     return (
         <div className={styles.top_bar}>
             <div className={styles.left_control}>
@@ -128,7 +126,7 @@ function Header({photo}){
                         </IconButton>
                 </Tooltip>
 
-                <p id={styles.date_header}>Cześć Mateusz</p>
+                <p id={styles.date_header}>Cześć {name}</p>
                 <Menu
                     anchorEl={anchorEl}
                     id="user-menu"
@@ -161,10 +159,10 @@ function Header({photo}){
                 >
                   <Link to="/account">
                       <MenuItem onClick={handleClose}>
-                        <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-                            <img id={styles.prof_pic} src={photo} />
-                            <p>Konto</p>
-                        </Box>
+                        <ListItemIcon>
+                            <AccountCircleIcon/>
+                        </ListItemIcon>
+                          Konto
                       </MenuItem>
                     </Link>
                     <Divider/>
@@ -176,8 +174,8 @@ function Header({photo}){
                           Ustawienia
                       </MenuItem>
                     </Link>
-                    <Link to="/login">
-                      <MenuItem>
+                    <Link to="/">
+                      <MenuItem onClick={handleLogout}>
                           <ListItemIcon>
                               <Logout/> 
                           </ListItemIcon>
