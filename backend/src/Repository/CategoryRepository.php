@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,14 +22,33 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    public function getCategoryByName(string $name): ?Category{
+    public function addCategory(Category $category): void{
+
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+
+    }
+
+    public function getCategoryByName(User $user, string $name): ?Category{
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('c')
             ->from(Category::class,'c')
-            ->andWhere('c.categoryName = :name')
+            ->where('c.categoryName = :name')
+            ->andWhere('c.idUser = :ID_user')
             ->setParameter('name',$name)
+            ->setParameter('ID_user',$user)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+    public function getAllCategories(User $user): ?Array{
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('c.categoryName')
+            ->from(Category::class,'c')
+            ->where('c.idUser = :ID_user')
+            ->setParameter('ID_user',$user)
+            ->getQuery()
+            ->getArrayResult();
     }
 }
