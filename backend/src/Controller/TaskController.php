@@ -32,7 +32,7 @@ class TaskController extends AbstractController
         $deadline = DateTime::createFromFormat('Y-m-d',$decoded->deadline);
         $priority = $decoded->priority;
         $category = $decoded->category;
-        $category_obj = $doctrine->getRepository(Category::class)->getCategoryByName($category);
+        $category_obj = $doctrine->getRepository(Category::class)->getCategoryByName($user,$category);
         $task = new Task();
         $task->setTitle($title);
         $task->setDescription($description);
@@ -49,7 +49,7 @@ class TaskController extends AbstractController
     public function getTasks(ManagerRegistry $doctrine, Request $request, string $category): JsonResponse{
 
         $user= $this->getUser();
-        $category_obj = $doctrine->getRepository(Category::class)->findOneBy(['categoryName'=>$category]);
+        $category_obj = $doctrine->getRepository(Category::class)->getCategoryByName($user,$category);
         $tasks = array();
         if($category === 'all'){
             $tasks = $doctrine->getRepository(Task::class)->getAllTasks($user);
