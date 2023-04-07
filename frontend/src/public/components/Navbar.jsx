@@ -1,23 +1,51 @@
 import { Divider, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Box, IconButton, Tooltip } from '@mui/material';
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../modules/navbar.module.css';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
-
+import {useNavigate} from "react-router-dom";
+import axios from 'axios';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import Confirmation from "./Confirmation";
 let Icon = () => <KeyboardArrowUpOutlinedIcon/>
 function Navbar({handleClick, handleOpen}){
-
-    const categories = ['Dom','Sport','Praca','Edukacja'];
+    const navigate = useNavigate();
     const [visible, setVisible] = React.useState(true);
-
+    const [categories,setCategories] = React.useState([]);
+    const [open, setOpen] = useState(false);
+    const handleDelete = () => setOpen(true);
     const toggleVisible = () => {
         setVisible((prevVisible) => !prevVisible);
     };    
         
     const iconButtonClass = `${styles.icon_button} ${visible ? '' :styles.icon_button_rotated}`;
-   
+
+    useEffect(()=>{
+       if(localStorage.getItem('token') === '' || localStorage.getItem('token') == null)
+       {
+           navigate('/')
+       }else{
+           getCategories();
+       }
+    },[])
+
+    const getCategories = () => {
+
+        axios.get('http://127.0.0.1:8000/api/get_categories/',{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response)=>{
+            setCategories(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        })
+
+    }
+
     return(
         <div className={styles.navbar}>
+            <Confirmation open={open} onClose={()=> setOpen(false)}/>
             <Drawer
                 sx={{
                     width: "305px",
@@ -76,11 +104,16 @@ function Navbar({handleClick, handleOpen}){
                     visibility: visible ? "visible" : "hidden"
                 }}>
                     <List>
-                        {categories.map((text)=>(
-                            <ListItem key={text} disablePadding >
-                                <ListItemButton onClick={()=> handleClick(text)}>
-                                    <ListItemText className={styles.category_text} primary={text}/>
+                        {categories.map((category)=>(
+                            <ListItem key={category.categoryName} disablePadding >
+                                <ListItemButton onClick={()=> handleClick(category.categoryName)}>
+                                    <ListItemText className={styles.category_text} primary={category.categoryName}/>
                                 </ListItemButton>
+                                <Tooltip title="Usuń">
+                                    <IconButton size="small" onClick={handleDelete}>
+                                        <DeleteOutlineOutlinedIcon/>
+                                    </IconButton>
+                                </Tooltip>
                             </ListItem>
                         ))}
                     </List>
