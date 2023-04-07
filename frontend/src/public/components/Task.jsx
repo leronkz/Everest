@@ -16,12 +16,19 @@ function Task({title, description, priority, date, handleDelete}){
 
     const iconButtonClass = `${styles.icon_button} ${visible ? styles.icon_button_rotated:''}`;
     let priority_value = "Niski";
-    if(priority === "green")
-        priority_value="Niski";
-    else if(priority === "orange")
-        priority_value="Średni";
-    else
-        priority_value="Wysoki";
+    let priority_color = "green";
+    if(priority === "low") {
+        priority_value = "Niski";
+        priority_color = "green";
+    }
+    else if(priority === "medium") {
+        priority_value = "Średni";
+        priority_color = "orange";
+    }
+    else {
+        priority_value = "Wysoki";
+        priority_color = "red";
+    }
     return(
         <Box className={styles.task}>
             <Box className={styles.task_header}>
@@ -29,7 +36,7 @@ function Task({title, description, priority, date, handleDelete}){
                     <Checkbox checked={checked} onChange={handleChange} inputProps={{'aria-label':'controlled'} }/>
                     <p className={styles.task_text}>{title}</p>
                 </Box>
-                <CircleIcon sx={{color: priority, border:"2px solid", borderColor: priority, borderRadius:"50%"}}/>
+                <CircleIcon sx={{color: priority_color, border:"2px solid", borderColor: priority_color, borderRadius:"50%"}}/>
                 <Box>
                     <Tooltip title= {visible ? "Zwiń" : "Pokaż"}>
                         <IconButton 
@@ -52,11 +59,11 @@ function Task({title, description, priority, date, handleDelete}){
                 </Box>
             </Box>
             <Box className={styles.task_body} sx={{display: visible ? "inline-block" : "none"}}>
-                <p className={styles.task_body_text}>{(description==="" ? "Brak opisu zadania" : description)}</p>
+                <p className={styles.task_body_text}>{(description==="" || description==null ? "Brak opisu zadania" : description)}</p>
                 <p className={styles.task_body_text}>Termin: {date}</p>
                 <Box sx={{display:"flex", alignItems:"center", width:"100%"}}>
                     <p className={styles.task_body_text}>Priorytet: {priority_value}</p>
-                    <CircleIcon sx={{ml:"1em",color: priority, border:'2px solid',borderRadius:"50%", borderColor: priority}}/>
+                    <CircleIcon sx={{ml:"1em",color: priority_color, border:'2px solid',borderRadius:"50%", borderColor: priority_color}}/>
                 </Box>
             </Box>
         </Box>
