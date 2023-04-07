@@ -19,3 +19,13 @@ get_tasks:
     path: /api/get_tasks/{category}
     controller: App\Controller\TaskController::getTasks
     methods: [GET]
+
+get_categories:
+    path: /api/get_categories
+    controller: App\Controller\CategoryController::getCategories
+    methods: [GET]
+
+add_category:
+    path: /api/add_category
+    controller: App\Controller\CategoryController::addCategory
+    methods: [POST]
