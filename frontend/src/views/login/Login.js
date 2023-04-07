@@ -15,11 +15,9 @@ function Login() {
     const [spinner, setSpinner] = React.useState(false);
     const handleEmailChange = (event) =>{
         setEmail(event.target.value);
-        console.log(email);
     }
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
-        console.log(password);
     }
 
     useEffect(()=>{

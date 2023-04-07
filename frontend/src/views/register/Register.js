@@ -6,6 +6,15 @@ import React from 'react';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+
+function check_password(password){
+    var upperCase = /[A-Z]/g;
+    var lowerCase = /[a-z]/g;
+    var number = /[0-9]/g;
+    if(password.match(upperCase) && password.match(lowerCase) && password.match(number))
+        return true;
+    return false;
+}
 function Register(){
 
     const [email, setEmail] = React.useState('');
@@ -17,53 +26,54 @@ function Register(){
     const [spinner, setSpinner] = React.useState(false);
     const handleEmailChange = (event) =>{
         setEmail(event.target.value);
-        console.log(email);
     }
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
-        console.log(password);
     }
     const handleRepeatPasswordChange = (event) => {
         setRepeatPassword(event.target.value);
-        console.log(repeatPassword);
     }
     const handleSubmit = (e) => {
         setValidationErrors([]);
         setValidationSuccess([]);
-        if(password === repeatPassword) {
+        if(password.length < 8 || !check_password(password)){
+            e.preventDefault();
+            setValidationErrors([{message:'Hasło musi zawierać 8 lub więcej znaków, zawierać jedną wielką oraz małą litere oraz jedną cyfre'}]);
+        }else {
+            if (password === repeatPassword) {
 
-            setSpinner(true);
-            setValidationErrors({});
-            e.preventDefault();
-            setIsSubmitting(true);
-            const data = {
-                email: email,
-                password: password
-            };
-            axios.post('http://127.0.0.1:8000/api/register', data, {
-                headers: {
-                    'Content-type': 'application/json'
-                }
-            })
-                .then(response => {
-                    setSpinner(false);
-                    setIsSubmitting(false);
-                    if (response.data !== undefined) {
-                        setValidationSuccess(response.data);
+                setSpinner(true);
+                setValidationErrors({});
+                e.preventDefault();
+                setIsSubmitting(true);
+                const data = {
+                    email: email,
+                    password: password
+                };
+                axios.post('http://127.0.0.1:8000/api/register', data, {
+                    headers: {
+                        'Content-type': 'application/json'
                     }
                 })
-                .catch(error => {
-                    setSpinner(false);
-                    setIsSubmitting(false);
-                    if (error.response.data !== undefined) {
-                        setValidationErrors(error.response.data);
-                        setValidationErrors([{message:"Podany adres email jest już zajęty"}])
-                    }
-                })
-        }
-        else{
-            e.preventDefault();
-            setValidationErrors([{message: "Podane hasła nie są takie same"}]);
+                    .then(response => {
+                        setSpinner(false);
+                        setIsSubmitting(false);
+                        if (response.data !== undefined) {
+                            setValidationSuccess(response.data);
+                        }
+                    })
+                    .catch(error => {
+                        setSpinner(false);
+                        setIsSubmitting(false);
+                        if (error.response.data !== undefined) {
+                            setValidationErrors(error.response.data);
+                            setValidationErrors([{message: "Podany adres email jest już zajęty"}])
+                        }
+                    })
+            } else {
+                e.preventDefault();
+                setValidationErrors([{message: "Podane hasła nie są takie same"}]);
+            }
         }
     }
 
