@@ -10,7 +10,7 @@ import {useNavigate} from "react-router-dom";
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function Section({category, img, isOpenCategory, handleCloseCategory}){
+function Section({category, isOpenCategory, handleCloseCategory}){
     const navigate = useNavigate();
     // Do dodawania zadan
     const [visible, setVisible] = useState(false);
@@ -26,7 +26,7 @@ function Section({category, img, isOpenCategory, handleCloseCategory}){
     if(category === '')
         category = "Wszystkie zadania";
 
-    const [tasks,setTasks] = React.useState({});
+    const [tasks,setTasks] = React.useState([]);
 
     useEffect(() =>{
         if(localStorage.getItem('token')==='' || localStorage.getItem('token')==null){
@@ -72,8 +72,7 @@ function Section({category, img, isOpenCategory, handleCloseCategory}){
                 display:"flex",
                 alignItems:"center",
             }}>
-                <p className={styles.category_name}>{category}</p> 
-                <img id={styles.imgs} src={img}/>
+                <p className={styles.category_name}>{category}</p>
             </Box>
             <Divider/>
             {/* Dodac overflow gdy jest duzo zdan */}
