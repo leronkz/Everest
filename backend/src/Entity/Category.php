@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Category
  *
- * @ORM\Table(name="category")
+ * @ORM\Table(name="category", indexes={@ORM\Index(name="category_user_ID_user_fk", columns={"ID_user"})})
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
 class Category
@@ -28,21 +28,62 @@ class Category
      */
     private $categoryName;
 
-    public function getIdCategory(): ?int
+    /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ID_user", referencedColumnName="ID_user")
+     * })
+     */
+    private $idUser;
+
+    /**
+     * @return int
+     */
+    public function getIdCategory(): int
     {
         return $this->idCategory;
     }
 
-    public function getCategoryName(): ?string
+    /**
+     * @param int $idCategory
+     */
+    public function setIdCategory(int $idCategory): void
+    {
+        $this->idCategory = $idCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryName(): string
     {
         return $this->categoryName;
     }
 
-    public function setCategoryName(string $categoryName): self
+    /**
+     * @param string $categoryName
+     */
+    public function setCategoryName(string $categoryName): void
     {
         $this->categoryName = $categoryName;
+    }
 
-        return $this;
+    /**
+     * @return User
+     */
+    public function getIdUser(): User
+    {
+        return $this->idUser;
+    }
+
+    /**
+     * @param User $idUser
+     */
+    public function setIdUser(User $idUser): void
+    {
+        $this->idUser = $idUser;
     }
 
 

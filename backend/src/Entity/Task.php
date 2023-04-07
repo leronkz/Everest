@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,7 +69,9 @@ class Task
      */
     private $idUser;
 
-
+    /**
+     * @return int
+     */
     public function getIdTask(): int
     {
         return $this->idTask;
@@ -82,6 +83,22 @@ class Task
     public function setIdTask(int $idTask): void
     {
         $this->idTask = $idTask;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
@@ -101,17 +118,17 @@ class Task
     }
 
     /**
-     * @return DateTime|null
+     * @return \DateTime|null
      */
-    public function getDeadline(): ?DateTime
+    public function getDeadline(): ?\DateTime
     {
         return $this->deadline;
     }
 
     /**
-     * @param DateTime|null $deadline
+     * @param \DateTime|null $deadline
      */
-    public function setDeadline(?DateTime $deadline): void
+    public function setDeadline(?\DateTime $deadline): void
     {
         $this->deadline = $deadline;
     }
@@ -162,22 +179,6 @@ class Task
     public function setIdUser(User $idUser): void
     {
         $this->idUser = $idUser;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
     }
 
 

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -60,69 +59,100 @@ class UserData
      */
     private $idUser;
 
-    public function getIdUserData(): ?int
+    /**
+     * @return int
+     */
+    public function getIdUserData(): int
     {
         return $this->idUserData;
     }
 
+    /**
+     * @param int $idUserData
+     */
+    public function setIdUserData(int $idUserData): void
+    {
+        $this->idUserData = $idUserData;
+    }
+
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSurname(): ?string
     {
         return $this->surname;
     }
 
-    public function setSurname(?string $surname): self
+    /**
+     * @param string|null $surname
+     */
+    public function setSurname(?string $surname): void
     {
         $this->surname = $surname;
-
-        return $this;
     }
 
-    public function getBirthDate(): ?\DateTimeInterface
+    /**
+     * @return \DateTime|null
+     */
+    public function getBirthDate(): ?\DateTime
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate(?\DateTimeInterface $birthDate): self
+    /**
+     * @param \DateTime|null $birthDate
+     */
+    public function setBirthDate(?\DateTime $birthDate): void
     {
         $this->birthDate = $birthDate;
-
-        return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getImage(): ?string
     {
         return $this->image;
     }
 
-    public function setImage(?string $image): self
+    /**
+     * @param string|null $image
+     */
+    public function setImage(?string $image): void
     {
         $this->image = $image;
-
-        return $this;
     }
 
-    public function getIdUser(): ?User
+    /**
+     * @return User
+     */
+    public function getIdUser(): User
     {
         return $this->idUser;
     }
 
-    public function setIdUser(?User $idUser): self
+    /**
+     * @param User $idUser
+     */
+    public function setIdUser(User $idUser): void
     {
         $this->idUser = $idUser;
-
-        return $this;
     }
 
 

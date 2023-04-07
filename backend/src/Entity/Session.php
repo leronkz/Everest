@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,45 +45,68 @@ class Session
      */
     private $idUser;
 
-    public function getIdSession(): ?int
+    /**
+     * @return int
+     */
+    public function getIdSession(): int
     {
         return $this->idSession;
     }
 
-    public function getLoginTime(): ?\DateTimeInterface
+    /**
+     * @param int $idSession
+     */
+    public function setIdSession(int $idSession): void
+    {
+        $this->idSession = $idSession;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLoginTime(): \DateTime
     {
         return $this->loginTime;
     }
 
-    public function setLoginTime(\DateTimeInterface $loginTime): self
+    /**
+     * @param \DateTime $loginTime
+     */
+    public function setLoginTime(\DateTime $loginTime): void
     {
         $this->loginTime = $loginTime;
-
-        return $this;
     }
 
-    public function getLogoutTime(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getLogoutTime(): \DateTime
     {
         return $this->logoutTime;
     }
 
-    public function setLogoutTime(\DateTimeInterface $logoutTime): self
+    /**
+     * @param \DateTime $logoutTime
+     */
+    public function setLogoutTime(\DateTime $logoutTime): void
     {
         $this->logoutTime = $logoutTime;
-
-        return $this;
     }
 
-    public function getIdUser(): ?User
+    /**
+     * @return User
+     */
+    public function getIdUser(): User
     {
         return $this->idUser;
     }
 
-    public function setIdUser(?User $idUser): self
+    /**
+     * @param User $idUser
+     */
+    public function setIdUser(User $idUser): void
     {
         $this->idUser = $idUser;
-
-        return $this;
     }
 
 
