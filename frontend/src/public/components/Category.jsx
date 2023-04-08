@@ -33,9 +33,10 @@ function Category(props){
                 'Content-type': 'application/json',
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
-        }).then((response)=>{
+        }).then(response=>{
+           ///TODO Wyswietlic odpowiedni komunikat jesli kategoria juz jest na liscie
                 // handleClick();
-        }).catch((error)=>{
+        }).catch(error=>{
 
         });
     }

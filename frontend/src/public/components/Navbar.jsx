@@ -41,7 +41,11 @@ function Navbar({handleClick, handleOpen}){
             console.log(error);
         })
 
-    }
+    };
+
+    const deleteCategory = () => {
+        //TODO Pobrac nazwe kategori po klinieciu i wyslanie na serwer
+    };
 
     return(
         <div className={styles.navbar}>
