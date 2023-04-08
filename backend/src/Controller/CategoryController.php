@@ -31,15 +31,30 @@ class CategoryController extends AbstractController
     #[Route('/add_category', name:'add_category', methods: 'POST')]
     #[Security("is_granted('ROLE_USER')")]
     public function addCategory(ManagerRegistry $doctrine, Request $request): JsonResponse{
-
+        ///TODO Jesli kategoria juz jest to nie dodawaj
         $user = $this->getUser();
         $decoded = json_decode($request->getContent());
-        $category = new Category();
-        $category->setCategoryName($decoded->name);
-        $category->setIdUser($user);
 
-        $doctrine->getRepository(Category::class)->addCategory($category);
+        $category_obj = $doctrine->getRepository(Category::class)->getCategoryByName($user,$decoded->name);
+        if(is_null($category_obj)) {
+            $category = new Category();
+            $category->setCategoryName($decoded->name);
+            $category->setIdUser($user);
+            $doctrine->getRepository(Category::class)->addCategory($category);
+            return $this->json(['message' => 'Category added successfully'], 200, ['Content-type: application/json']);
+        }else{
+            return $this->json(['message'=>'Category already created'],200,['Content-type: application/json']);
+        }
+    }
 
-        return $this->json(['message'=>'Category added successfully'],200,['Content-type: application/json']);
+    #[Route('/delete_category',name:'delete_category', methods: 'POST')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function deleteCategory(ManagerRegistry $doctrine, Request $request): JsonResponse{
+        $user = $this->getUser();
+        $decoded = json_decode($request->getContent());
+        $category_name = $decoded->name;
+        $category = $doctrine->getRepository(Category::class)->getCategoryByName($user,$category_name);
+        $doctrine->getRepository(Category::class)->removeCategory($category);
+        return $this->json(['message'=>'Category removed successfully'],200,['Content-type: application/json']);
     }
 }

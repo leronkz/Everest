@@ -51,4 +51,10 @@ class CategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function removeCategory(Category $category): void{
+        $this->getEntityManager()->remove($category);
+        $this->getEntityManager()->flush();
+    }
+
 }
