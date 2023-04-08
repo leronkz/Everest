@@ -79,3 +79,22 @@
     background: #e03d3d;
     color:white;
 }
+
+.errorText{
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    width:100%;
+    color: red;
+    text-align: center;
+}
+.successText{
+    font-family: 'Roboto';
+    font-style:normal;
+    font-weight: 400;
+    font-size: 18px;
+    width: 100%;
+    color: green;
+    text-align: center;
+}
