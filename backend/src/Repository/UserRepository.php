@@ -35,6 +35,17 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+    public function updateUserPassword(User $user, string $newPassword): void{
+        $this->getEntityManager()
+            ->createQueryBuilder()
+            ->update(User::class,'u')
+            ->set('u.password',':new_password')
+            ->where('u.idUser = :ID_user')
+            ->setParameter('new_password',$newPassword)
+            ->setParameter('ID_user',$user->getIdUser())
+            ->getQuery()
+            ->execute();
+    }
 
 //    public function remove(User $entity, bool $flush = false): void
 //    {
