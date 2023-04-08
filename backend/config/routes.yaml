@@ -29,3 +29,13 @@ add_category:
     path: /api/add_category
     controller: App\Controller\CategoryController::addCategory
     methods: [POST]
+
+delete_category:
+    path: /api/delete_category
+    controller: App\Controller\CategoryController::deleteCategory
+    methods: [POST]
+
+change_password:
+    path: /api/change_password
+    controller: App\Controller\SecurityController::changePassword
+    methods: [POST]
