@@ -10,11 +10,11 @@ function check_password(password){
     var upperCase = /[A-Z]/g;
     var lowerCase = /[a-z]/g;
     var number = /[0-9]/g;
-    if(password.match(upperCase) && password.match(lowerCase) && password.match(number))
-        return true;
-    return false;
+    return !!(password.match(upperCase) && password.match(lowerCase) && password.match(number));
+
 }
 function Settings(){
+
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -24,6 +24,13 @@ function Settings(){
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [errors, setErrors] = React.useState([]);
     const [success, setSuccess] = React.useState([]);
+
+    useEffect(()=>{
+        if(localStorage.getItem('token') === '' || localStorage.getItem('token') == null)
+        {
+            navigate('/')
+        }
+    },[])
     const handleOldPasswordChange = (e) =>{
         setOldPassword(e.target.value);
     }
@@ -82,22 +89,29 @@ function Settings(){
             setErrors([{message:'Nowe hasło jest takie same jak stare'}]);
         }
     }
-    useEffect(()=>{
-        if(localStorage.getItem('token') === "" || localStorage.getItem('token') == null){
-            navigate('/');
-        }else{
-
-        }
-    },[]);
     const handleLogout = () => {
         localStorage.setItem('token',"");
         navigate("/login");
     }
+
+    const deleteAccount = () => {
+        axios.get('http://127.0.0.1:8000/api/delete_account', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then(response=>{
+            // handleSuccessSnackbarClick();
+            localStorage.setItem('token','');
+        }).catch(error=>{
+            // handleErrorSnackbarClick();
+        })
+    };
+
     return(
         <div className={styles.container}>
             <header><Header logoutAction={handleLogout}/></header>
             <main className={styles.main}>
-            <Confirmation open={open} onClose={()=> setOpen(false)}/>
+            <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=> {deleteAccount(); setOpen(false)}}/>
                 <form className={styles.change_form} onSubmit={handleSubmit}>
                     {Object.keys(errors).length !==0 &&
                         <p className={styles.errorText}>{errors[0].message}</p>
