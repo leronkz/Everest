@@ -7,13 +7,25 @@ import {useNavigate} from "react-router-dom";
 import axios from 'axios';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Confirmation from "./Confirmation";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from '@mui/material/Snackbar';
 let Icon = () => <KeyboardArrowUpOutlinedIcon/>
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
+});
 function Navbar({handleClick, handleOpen}){
     const navigate = useNavigate();
+    const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
+    const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
     const [visible, setVisible] = React.useState(true);
     const [categories,setCategories] = React.useState([]);
     const [open, setOpen] = useState(false);
-    const handleDelete = () => setOpen(true);
+    const [categoryToDelete, setCategoryToDelete] = React.useState('');
+    const handleDelete = (category) => {
+        setOpen(true);
+        setCategoryToDelete(category.categoryName);
+    }
     const toggleVisible = () => {
         setVisible((prevVisible) => !prevVisible);
     };    
@@ -42,14 +54,48 @@ function Navbar({handleClick, handleOpen}){
         })
 
     };
-
-    const deleteCategory = () => {
-        //TODO Pobrac nazwe kategori po klinieciu i wyslanie na serwer
+    const handleSuccessSnackbarClick = () => {
+        setOpenSuccessSnackbar(true);
+    }
+    const handleErrorSnackbarClick = () => {
+        setOpenErrorSnackbar(true);
+    }
+    const handleClose = (event, reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenSuccessSnackbar(false);
+        setOpenErrorSnackbar(false);
+    }
+    const deleteCategory = (category) => {
+        const data={
+            name: category
+        };
+        axios.post('http://127.0.0.1:8000/api/delete_category', data, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then(response=>{
+                handleSuccessSnackbarClick();
+        }).catch(error=>{
+                handleErrorSnackbarClick();
+        })
     };
 
     return(
         <div className={styles.navbar}>
-            <Confirmation open={open} onClose={()=> setOpen(false)}/>
+            <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=> {deleteCategory(categoryToDelete); setOpen(false)}}/>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
+                    Kategoria została pomyślnie usunięta
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się usunąć kategorii
+                </Alert>
+            </Snackbar>
             <Drawer
                 sx={{
                     width: "305px",
@@ -114,7 +160,7 @@ function Navbar({handleClick, handleOpen}){
                                     <ListItemText className={styles.category_text} primary={category.categoryName}/>
                                 </ListItemButton>
                                 <Tooltip title="Usuń">
-                                    <IconButton size="small" onClick={handleDelete}>
+                                    <IconButton size="small" onClick={()=>handleDelete(category)}>
                                         <DeleteOutlineOutlinedIcon/>
                                     </IconButton>
                                 </Tooltip>

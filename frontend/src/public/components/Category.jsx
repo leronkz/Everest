@@ -35,9 +35,9 @@ function Category(props){
             }
         }).then(response=>{
            ///TODO Wyswietlic odpowiedni komunikat jesli kategoria juz jest na liscie
-                // handleClick();
+           //      handleClick();
         }).catch(error=>{
-
+                console.log(error.data);
         });
     }
 
@@ -53,6 +53,11 @@ function Category(props){
 
     return(
         <div className = {styles.add_category_container}>
+            {/*<Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={true} autoHideDuration={6000} onClose={handleClose}>*/}
+            {/*    <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>*/}
+            {/*        Udało się dodać nową kategorie*/}
+            {/*    </Alert>*/}
+            {/*</Snackbar>*/}
             <Tooltip title="Zamknij">
                 <IconButton size="medium" sx={{alignSelf:"flex-end"}} onClick={onClose}><CloseIcon/></IconButton>
             </Tooltip>
@@ -63,11 +68,6 @@ function Category(props){
                 <Button onClick={handleSubmit} sx={{width:"50%", alignSelf:"center"}}variant="outlined" startIcon={<AddOutlinedIcon/>}>
                     Dodaj
                 </Button>
-                {/*<Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={true} autoHideDuration={6000} onClose={handleClose}>*/}
-                {/*    <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>*/}
-                {/*        Udało się dodać nową kategorie*/}
-                {/*    </Alert>*/}
-                {/*</Snackbar>*/}
             </Box> 
         </div>
     );
