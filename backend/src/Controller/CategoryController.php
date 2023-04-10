@@ -43,11 +43,11 @@ class CategoryController extends AbstractController
             $doctrine->getRepository(Category::class)->addCategory($category);
             return $this->json(['message' => 'Category added successfully'], 200, ['Content-type: application/json']);
         }else{
-            return $this->json(['message'=>'Category already created'],200,['Content-type: application/json']);
+            return $this->json(['message'=>'Category already created'],400,['Content-type: application/json']);
         }
     }
 
-    #[Route('/delete_category',name:'delete_category', methods: 'POST')]
+    #[Route('/delete_category', name:'delete_category', methods: 'POST')]
     #[Security("is_granted('ROLE_USER')")]
     public function deleteCategory(ManagerRegistry $doctrine, Request $request): JsonResponse{
         $user = $this->getUser();
