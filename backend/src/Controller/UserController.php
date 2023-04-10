@@ -26,4 +26,11 @@ class UserController extends AbstractController
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
         return $this->json($userData,200,['Content-type: application/json']);
     }
+    #[Route('/api/delete_account', name: 'delete_account', methods: 'GET')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function deleteUser(ManagerRegistry $doctrine): JsonResponse{
+        $user = $this->getUser();
+        $doctrine->getRepository(User::class)->removeUser($user);
+        return $this->json(['message'=>'Account deleted successfully'],200,['Content-type: application/json']);
+    }
 }
