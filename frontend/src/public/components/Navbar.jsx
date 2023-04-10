@@ -22,6 +22,7 @@ function Navbar({handleClick, handleOpen}){
     const [categories,setCategories] = React.useState([]);
     const [open, setOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = React.useState('');
+
     const handleDelete = (category) => {
         setOpen(true);
         setCategoryToDelete(category.categoryName);
