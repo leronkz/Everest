@@ -6,6 +6,12 @@ import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import {Box} from "@mui/system";
 import {useNavigate} from "react-router-dom";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from '@mui/material/Snackbar';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
+});
 function check_password(password){
     var upperCase = /[A-Z]/g;
     var lowerCase = /[a-z]/g;
@@ -24,13 +30,15 @@ function Settings(){
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [errors, setErrors] = React.useState([]);
     const [success, setSuccess] = React.useState([]);
+    const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
+    const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
 
     useEffect(()=>{
         if(localStorage.getItem('token') === '' || localStorage.getItem('token') == null)
         {
             navigate('/')
         }
-    },[])
+    },[localStorage.getItem('token')])
     const handleOldPasswordChange = (e) =>{
         setOldPassword(e.target.value);
     }
@@ -40,7 +48,19 @@ function Settings(){
     const handleRepeatPasswordChange = (e) =>{
         setRepeatPassword(e.target.value);
     }
-
+    const handleSuccessSnackbarClick = () => {
+        setOpenSuccessSnackbar(true);
+    }
+    const handleErrorSnackbarClick = () => {
+        setOpenErrorSnackbar(true);
+    }
+    const handleClose = (event, reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenSuccessSnackbar(false);
+        setOpenErrorSnackbar(false);
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -91,6 +111,7 @@ function Settings(){
     }
     const handleLogout = () => {
         localStorage.setItem('token',"");
+        localStorage.setItem('username',"");
         navigate("/login");
     }
 
@@ -100,16 +121,25 @@ function Settings(){
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then(response=>{
-            // handleSuccessSnackbarClick();
-            localStorage.setItem('token','');
+            handleSuccessSnackbarClick();
         }).catch(error=>{
-            // handleErrorSnackbarClick();
+            handleErrorSnackbarClick();
         })
     };
 
     return(
         <div className={styles.container}>
-            <header><Header logoutAction={handleLogout}/></header>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={()=>{handleClose(); localStorage.setItem('token',"")}}>
+                <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
+                    Pomyślnie usunięto konto, zaraz nastąpi wylogowanie
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się usunąć konta
+                </Alert>
+            </Snackbar>
+            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')}/></header>
             <main className={styles.main}>
             <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=> {deleteAccount(); setOpen(false)}}/>
                 <form className={styles.change_form} onSubmit={handleSubmit}>
