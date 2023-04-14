@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from '../modules/task.module.css';
 import { Box, IconButton, Tooltip} from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
@@ -6,13 +6,23 @@ import CircleIcon from '@mui/icons-material/Circle';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-function Task({title, description, priority, date, handleDelete}){
+import axios from 'axios';
+import Confirmation from "./Confirmation";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from '@mui/material/Snackbar';
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
+});
+function Task({id, title, description, priority, date}){
 
     const [checked, setChecked] = React.useState(false);
     const handleChange = (event) => {
       setChecked(event.target.checked);
     };
     const [visible, setVisible] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
+    const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
 
     const iconButtonClass = `${styles.icon_button} ${visible ? styles.icon_button_rotated:''}`;
     let priority_value = "Niski";
@@ -29,8 +39,46 @@ function Task({title, description, priority, date, handleDelete}){
         priority_value = "Wysoki";
         priority_color = "red";
     }
+
+    const handleSuccessSnackbarClick = () => {
+        setOpenSuccessSnackbar(true);
+    }
+    const handleErrorSnackbarClick = () => {
+        setOpenErrorSnackbar(true);
+    }
+    const handleClose = (event, reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenSuccessSnackbar(false);
+        setOpenErrorSnackbar(false);
+    }
+    const deleteAction = () =>{
+
+        axios.delete(`http://127.0.0.1:8000/api/delete_task/${id}`,{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then(response=>{
+            handleSuccessSnackbarClick();
+        }).catch(error=>{
+            handleErrorSnackbarClick();
+        });
+    }
+
     return(
         <Box className={styles.task}>
+            <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=>{deleteAction(); setOpen(false);}}/>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
+                    Zadanie zostało pomyślnie usunięte
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się usunąć zadania
+                </Alert>
+            </Snackbar>
             <Box className={styles.task_header}>
                 <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center"}}>
                     <Checkbox checked={checked} onChange={handleChange} inputProps={{'aria-label':'controlled'} }/>
@@ -52,7 +100,7 @@ function Task({title, description, priority, date, handleDelete}){
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Usuń">
-                        <IconButton size="medium" onClick={handleDelete}>
+                        <IconButton size="medium" onClick={() => setOpen(true)}>
                             <DeleteOutlineOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
