@@ -44,3 +44,13 @@ delete_account:
     path: /api/delete_account
     controller: App\Controller\UserController::deleteUser
     methods: [GET]
+
+save_user_data:
+    path: /api/save_user
+    controller: App\Controller\UserController::saveUserData
+    methods: [POST]
+
+delete_task:
+    path: /api/delete_task/{id}
+    controller: App\Controller\TaskController::deleteTask
+    methods: [DELETE]
