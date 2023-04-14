@@ -32,7 +32,7 @@ class TaskRepository extends ServiceEntityRepository
     public function getTasksByCategory(User $user, Category $category): ?Array{
        return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select("t.title", "t.description", "t.priority", "t.deadline")
+            ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline")
             ->from(Task::class,"t")
             ->join(User::class,"u",'WITH',"t.idUser = u.idUser")
             ->join(Category::class,"c",'WITH',"t.idCategory = c.idCategory")
@@ -46,7 +46,7 @@ class TaskRepository extends ServiceEntityRepository
     public function getAllTasks(User $user): ?Array{
         return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select("t.title", "t.description", "t.priority", "t.deadline")
+            ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline")
             ->from(Task::class,"t")
             ->join(User::class,"u","WITH","t.idUser = u.idUser")
 //            ->join(Category::class,"c","WITH","t.idCategory = c.idCategory")
@@ -58,7 +58,7 @@ class TaskRepository extends ServiceEntityRepository
     public function getTodaysTasks(User $user, DateTime $date): ?Array{
         return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select("t.title", "t.description", "t.priority", "t.deadline")
+            ->select("t.idTask","t.title", "t.description", "t.priority", "t.deadline")
             ->from(Task::class, "t")
             ->join(User::class,"u","WITH","t.idUser = u.idUser")
 //            ->join(Category::class, "c","WITH","t.idCategory = c.idCategory")
@@ -68,5 +68,10 @@ class TaskRepository extends ServiceEntityRepository
             ->setParameter('date',$date)
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function removeTask(Task $task): void{
+        $this->getEntityManager()->remove($task);
+        $this->getEntityManager()->flush();
     }
 }

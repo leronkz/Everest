@@ -68,4 +68,13 @@ class TaskController extends AbstractController
         else
             return $this->json($tasks,200,['Content-type: application/json']);
     }
+    #[Route('/delete_task/{id}', name:'delete_task', methods: 'DELETE')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function deleteTask(ManagerRegistry $doctrine, int $id): JsonResponse{
+
+        $task = $doctrine->getRepository(Task::class)->find($id);
+        $doctrine->getRepository(Task::class)->removeTask($task);
+        return $this->json('Task deleted successfully',200,['Content-type: application/json']);
+
+    }
 }
