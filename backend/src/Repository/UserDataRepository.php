@@ -27,15 +27,35 @@ class UserDataRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function getUserData(User $user): Array{
+        public function getUserData(User $user): Array{
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('ud.name', 'ud.surname', 'ud.birthDate','ud.image')
             ->from(UserData::class, 'ud')
             ->join(User::class,'u','WITH','ud.idUser = u.idUser')
-            ->andWhere('u.idUser = :ID_user')
+            ->where('u.idUser = :ID_user')
             ->setParameter('ID_user',$user)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getSingleResult();
+    }
+
+    public function updateUserData(User $user, Array $userData): void{
+
+        $this->getEntityManager()
+            ->createQueryBuilder()
+            ->update(UserData::class,'ud')
+            ->set('ud.name',':new_name')
+            ->set('ud.surname',':new_surname')
+            ->set('ud.birthDate',':new_birthdate')
+//            ->set('ud.image',':new_image')
+            ->where('ud.idUser = :ID_user')
+            ->setParameter('new_name',$userData['name'])
+            ->setParameter('new_surname',$userData['surname'])
+            ->setParameter('new_birthdate',$userData['birthdate'])
+//            ->setParameter('new_image',$userData['image'])
+            ->setParameter('ID_user',$user->getIdUser())
+            ->getQuery()
+            ->execute();
+
     }
 }
