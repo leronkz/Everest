@@ -19,10 +19,6 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         setVisible(true);
     };
 
-    //Do obsługi popup'u z usuwaniem
-    const [open, setOpen] = useState(false);
-    const handleDelete = () => setOpen(true);
-
     if(category === '')
         category = "Wszystkie zadania";
 
@@ -67,7 +63,6 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         }}>
             <AddTask visible={visible} onClose={()=> setVisible(false)}/>
             <Category open={isOpenCategory} onClose = {handleCloseCategory}/>
-            <Confirmation open={open} onClose={()=> setOpen(false)}/>
             <Box sx={{
                 display:"flex",
                 alignItems:"center",
@@ -79,7 +74,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             <div className={styles.tasks_panel}>
                 {spinner && (<Box sx={{mt:"2ch", mb:"2ch", display:"flex", justifyContent:"center",position:"absolute"}}><CircularProgress/></Box>)}
                 {tasks.map((task)=>(
-                    <Task title={task.title} description={task.description} date={task.deadline.substring(0,10)} priority={task.priority} handleDelete={handleDelete}></Task>
+                    <Task id={task.idTask} title={task.title} description={task.description} date={task.deadline.substring(0,10)} priority={task.priority}></Task>
                 ))}
                 <Box className={styles.task}>
                     <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center", width:"100%"}}>
