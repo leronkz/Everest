@@ -30,7 +30,7 @@ class UserRepository extends ServiceEntityRepository
        return $this->getEntityManager()
             ->createQueryBuilder()->select('u')
             ->from(User::class,'u')
-            ->andWhere('u.email = :email')
+            ->where('u.email = :email')
             ->setParameter('email',$email)
             ->getQuery()
             ->getOneOrNullResult();
