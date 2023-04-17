@@ -8,19 +8,22 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Select from '@mui/material/Select';
 import axios from "axios";
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from '@mui/material/Snackbar';
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
+});
 
-// Kategorie pobierane z back'a albo wysylane przez props
+function AddTask(props){
 
-function Task(props){
-
-    const {visible, onClose} = props;
-
+    const {visible, onClose, categories} = props;
     const [title,setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [deadline, setDeadline] = React.useState('');
     const [priority,setPriority] = React.useState('low');
     const [category,setCategory] = React.useState('');
-
+    const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
+    const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
     }
@@ -36,7 +39,19 @@ function Task(props){
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
     }
-
+    const handleSuccessSnackbarClick = () => {
+        setOpenSuccessSnackbar(true);
+    }
+    const handleErrorSnackbarClick = () => {
+        setOpenErrorSnackbar(true);
+    }
+    const handleClose = (event, reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenSuccessSnackbar(false);
+        setOpenErrorSnackbar(false);
+    }
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {
@@ -52,17 +67,26 @@ function Task(props){
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then((response)=>{
-
+            handleSuccessSnackbarClick();
         }).catch((error)=>{
-
+            handleErrorSnackbarClick();
         });
     }
 
     if(!visible)
         return null;
     return(
-
         <Box className={styles.add_task_container}>
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={true} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
+                    Zadanie zostało pomyślnie dodane
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się dodać zadania
+                </Alert>
+            </Snackbar>
             <Tooltip title="Zamknij">
                 <IconButton size="large" sx={{alignSelf:"flex-end"}} onClick={onClose}><CloseIcon/></IconButton>
             </Tooltip>
@@ -98,10 +122,9 @@ function Task(props){
                             onChange={handleCategoryChange}
                             displayEmpty
                         >
-                            <MenuItem value={"Dom"}>Dom</MenuItem>
-                            <MenuItem value={"Sport"}>Sport</MenuItem>
-                            <MenuItem value={"Praca"}>Praca</MenuItem>
-                            <MenuItem value={"Edukacja"}>Edukacja</MenuItem>
+                            {categories.map((category)=>(
+                                <MenuItem value={category.categoryName}>{category.categoryName}</MenuItem>
+                            ))}
                         </Select>
                     </Box>
                 </Box>
@@ -111,4 +134,4 @@ function Task(props){
     );
 }
 
-export default Task;
+export default AddTask;
