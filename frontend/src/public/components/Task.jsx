@@ -10,11 +10,12 @@ import axios from 'axios';
 import Confirmation from "./Confirmation";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from '@mui/material/Snackbar';
+import UpdateTask from './UpdateTask';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
-function Task({id, title, description, priority, date}){
-
+function Task(props){
+    const {id, title, description, priority, date, categories} = props;
     const [checked, setChecked] = React.useState(false);
     const handleChange = (event) => {
       setChecked(event.target.checked);
@@ -23,6 +24,9 @@ function Task({id, title, description, priority, date}){
     const [open, setOpen] = useState(false);
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
+    const [openUpdateTask, setOpenUpdateTask] = React.useState(false);
+
+
 
     const iconButtonClass = `${styles.icon_button} ${visible ? styles.icon_button_rotated:''}`;
     let priority_value = "Niski";
@@ -95,7 +99,7 @@ function Task({id, title, description, priority, date}){
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Edytuj">
-                        <IconButton size="medium">
+                        <IconButton size="medium" onClick={()=> setOpenUpdateTask(true)}>
                             <EditOutlinedIcon/>
                         </IconButton>
                     </Tooltip>
@@ -114,6 +118,7 @@ function Task({id, title, description, priority, date}){
                     <CircleIcon sx={{ml:"1em",color: priority_color, border:'2px solid',borderRadius:"50%", borderColor: priority_color}}/>
                 </Box>
             </Box>
+            <UpdateTask id={id} title={title} description={description} deadline={date} priority={priority} category={"Dom"} visible={openUpdateTask} onClose={()=> setOpenUpdateTask(false)} categories={categories}/>
         </Box>
     );
 }
