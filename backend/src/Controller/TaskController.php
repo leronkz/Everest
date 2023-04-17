@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use DateTime;
-use Symfony\Component\Validator\Constraints\Date;
 
 
 /**
@@ -75,6 +74,28 @@ class TaskController extends AbstractController
         $task = $doctrine->getRepository(Task::class)->find($id);
         $doctrine->getRepository(Task::class)->removeTask($task);
         return $this->json('Task deleted successfully',200,['Content-type: application/json']);
-
     }
+
+    #[Route('/update_task/{id}', name: 'update_task', methods:'PUT')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function updateTask(ManagerRegistry $doctrine, Request $request, int $id): JsonResponse{
+
+        $user = $this->getUser();
+        $decoded = json_decode($request->getContent());
+        $category_obj = $doctrine->getRepository(Category::class)->getCategoryByName($user,$decoded->category);
+        $deadline = DateTime::createFromFormat('Y-m-d',$decoded->deadline);
+
+        $updatedTask = new Task();
+        $updatedTask->setIdUser($user);
+        $updatedTask->setTitle($decoded->title);
+        $updatedTask->setDescription($decoded->description);
+        $updatedTask->setDeadline($deadline);
+        $updatedTask->setPriority($decoded->priority);
+        $updatedTask->setIdCategory($category_obj);
+
+        $doctrine->getRepository(Task::class)->updateTask($updatedTask, $id);
+
+        return $this->json(['message'=>'Task updated successfully'],200,['Content-type: application/json']);
+    }
+
 }

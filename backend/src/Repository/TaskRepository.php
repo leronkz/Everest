@@ -49,7 +49,6 @@ class TaskRepository extends ServiceEntityRepository
             ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline")
             ->from(Task::class,"t")
             ->join(User::class,"u","WITH","t.idUser = u.idUser")
-//            ->join(Category::class,"c","WITH","t.idCategory = c.idCategory")
             ->where('u.idUser = :ID_user')
             ->setParameter('ID_user',$user)
             ->getQuery()
@@ -61,13 +60,32 @@ class TaskRepository extends ServiceEntityRepository
             ->select("t.idTask","t.title", "t.description", "t.priority", "t.deadline")
             ->from(Task::class, "t")
             ->join(User::class,"u","WITH","t.idUser = u.idUser")
-//            ->join(Category::class, "c","WITH","t.idCategory = c.idCategory")
             ->where('u.idUser = :ID_user')
             ->andWhere('t.deadline = :date')
             ->setParameter('ID_user',$user)
             ->setParameter('date',$date)
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function updateTask(Task $task, int $id): void{
+        $this->getEntityManager()
+            ->createQueryBuilder()
+            ->update(Task::class,'t')
+            ->set('t.title',':new_title')
+            ->set('t.description',':new_description')
+            ->set('t.deadline',':new_deadline')
+            ->set('t.priority',':new_priority')
+            ->set('t.idCategory',':new_category')
+            ->where('t.idTask = :ID_task')
+            ->setParameter('new_title',$task->getTitle())
+            ->setParameter('new_description',$task->getDescription())
+            ->setParameter('new_deadline', $task->getDeadline())
+            ->setParameter('new_priority',$task->getPriority())
+            ->setParameter('new_category',$task->getIdCategory()->getIdCategory())
+            ->setParameter('ID_task',$id)
+            ->getQuery()
+            ->execute();
     }
 
     public function removeTask(Task $task): void{
