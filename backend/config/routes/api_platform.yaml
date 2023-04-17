@@ -2,3 +2,61 @@ api_platform:
     resource: .
     type: api_platform
     prefix: /api
+
+#api_platform:
+#    mapping:
+#        paths:
+#            # Ścieżka do Twoich encji
+#            - '%kernel.project_dir%/src/Entity'
+#    patch_formats:
+#        json: ['application/merge-patch+json']
+#    swagger:
+#        api_keys:
+#            # Konfiguracja kluczy API, jeśli jest wymagane
+#            # np. w przypadku korzystania z narzędzi do dokumentacji, takich jak Swagger UI
+#            api_key_name: 'Authorization'
+#            # Jeśli używasz autoryzacji tokenem JWT:
+#            # api_key_type: 'header'
+#            # api_key_pattern: 'Bearer %s'
+#    # Konfiguracja kolekcji operacji (endpoints)
+#    collection:
+#        operations:
+#            # Dla Twojego endpointu /api/get_tasks/{category}
+#            get:
+#                path: '/api/get_tasks/{category}'
+#                # Wskazanie kontrolera, który obsłuży ten endpoint
+#                controller: 'App\Controller\TaskController::get'
+#                # Konfiguracja odpowiedzi
+#                openapi_context:
+#                    summary: 'Pobierz zadania według kategorii'
+#                    description: 'Pobiera zadania na podstawie kategorii'
+#                    parameters:
+#                        - name: 'category'
+#                          in: 'path'
+#                          required: true
+#                          description: 'Kategoria zadania'
+#                          schema:
+#                              type: 'string'
+#                    responses:
+#                        '200':
+#                            description: 'OK'
+#                            content:
+#                                application/json:
+#                                    schema:
+#                                        type: 'array'
+#                                        items:
+#                                            type: 'object'
+#                                            properties:
+#                                            # Tu możesz dodać definicje pól w odpowiedzi
+#                                            # np. 'id':
+#                                            #     type: 'integer'
+#                                            #     format: 'int64'
+#                                            #     description: 'ID zadania'
+#                                            # 'title':
+#                                            #     type: 'string'
+#                                            #     description: 'Tytuł zadania'
+#                                            # itd.
+#                        # Tu możesz dodać definicje innych możliwych odpowiedzi
+#                        # np. '404':
+#                        #     description: 'Nie znaleziono'
+#                        # itd.
