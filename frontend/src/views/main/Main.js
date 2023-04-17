@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom';
 function Main(){
 
     const navigate = useNavigate();
-    // const [userData,setUserData] = React.useState({});
+    const [userData,setUserData] = React.useState({});
 
     useEffect(()=>{
         if(localStorage.getItem('token') === "" || localStorage.getItem('token') == null){
@@ -24,7 +24,7 @@ function Main(){
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then((response)=>{
-                // setUserData(response.data);
+                setUserData(response.data);
                 localStorage.setItem('username',response.data.name);
                 // console.log(userData.name);
         })
@@ -40,7 +40,7 @@ function Main(){
     const handleOpen = () => setAddCategory(true);
     return(
          <div className={styles.container}>
-           <header style={{verticalAlign:"top"}}><Header logoutAction={handleLogout} name={localStorage.getItem('username')}/></header>
+           <header style={{verticalAlign:"top"}}><Header logoutAction={handleLogout} name={userData.name}/></header>
            <div className={styles.main}>    
                 <Navbar handleClick = {handleClick} handleOpen={handleOpen}/>
                 <main>
