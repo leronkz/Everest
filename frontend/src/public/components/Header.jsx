@@ -122,7 +122,7 @@ function Header({logoutAction,name}){
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                         >
-                         <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>   
+                         <Avatar sx={{ width: 32, height: 32 }}>{(name==="" || name==null ? "A" : name.charAt(0))}</Avatar>
                         </IconButton>
                 </Tooltip>
 
