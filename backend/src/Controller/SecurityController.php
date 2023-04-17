@@ -37,8 +37,8 @@ class SecurityController extends AbstractController
         $doctrine->getRepository(User::class)->addUser($user);
         $registeredUser = $doctrine->getRepository(User::class)->getUserByEmail($email);
         $userData = new UserData();
-        $userData->setName("Imie");
-        $userData->setSurname("Nazwisko");
+        $userData->setName("");
+        $userData->setSurname("");
         $userData->setBirthDate(null);
         $userData->setImage(null);
         $userData->setIdUser($registeredUser);

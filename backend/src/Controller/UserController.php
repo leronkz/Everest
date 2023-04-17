@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,9 +24,11 @@ class UserController extends AbstractController
 {
     #[Route('/api/user', name:'get_user', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
-    public function getUserData(ManagerRegistry $doctrine): JsonResponse{
+    public function getUserData(ManagerRegistry $doctrine, FileUploader $fileUploader): JsonResponse{
         $user = $this->getUser();
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
+//        $filePath = $fileUploader->getTargetDirectory().'/'.$userData['image'];
+//        $userData['image'] = new BinaryFileResponse($filePath);
         return $this->json($userData,200,['Content-type: application/json']);
     }
     #[Route('/api/delete_account', name: 'delete_account', methods: 'GET')]
@@ -42,14 +47,16 @@ class UserController extends AbstractController
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
         $name = $decoded->name;
         $surname = $decoded->surname;
-        $birthdate = $decoded->birthdate;
-//        $image = $decoded->image;
-//        $imageFilename = $fileUploader->upload($image);
-
+        $birthdate = DateTime::createFromFormat('Y-m-d',$decoded->birthdate);
+//        $decodedImage = base64_decode($decoded->image);
+//        $tempFilePath = tempnam(sys_get_temp_dir(),'image_');
+//        file_put_contents($tempFilePath, $decodedImage);
+//        $file = new UploadedFile($tempFilePath, 'image.jpg','image/jpeg',null,true);
+//        $fileName = $fileUploader->upload($file);
+//        $userData['image'] = $fileName;
         $userData['name'] = $name;
         $userData['surname'] = $surname;
         $userData['birthdate'] = $birthdate;
-//        $userData['image'] = $imageFilename;
         $doctrine->getRepository(UserData::class)->updateUserData($user,$userData);
         return $this->json(['message'=>'User data saved successfully'],200,['Content-type: application/json']);
     }
