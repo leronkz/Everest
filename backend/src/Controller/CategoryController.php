@@ -31,7 +31,6 @@ class CategoryController extends AbstractController
     #[Route('/add_category', name:'add_category', methods: 'POST')]
     #[Security("is_granted('ROLE_USER')")]
     public function addCategory(ManagerRegistry $doctrine, Request $request): JsonResponse{
-        ///TODO Jesli kategoria juz jest to nie dodawaj
         $user = $this->getUser();
         $decoded = json_decode($request->getContent());
 
@@ -47,6 +46,7 @@ class CategoryController extends AbstractController
         }
     }
 
+//    Zmienil bym na delete
     #[Route('/delete_category', name:'delete_category', methods: 'POST')]
     #[Security("is_granted('ROLE_USER')")]
     public function deleteCategory(ManagerRegistry $doctrine, Request $request): JsonResponse{
