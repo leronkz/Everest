@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import styles from '../modules/section.module.css';
 import AddTask from './AddTask';
 import AddIcon from '@mui/icons-material/Add';
-import Confirmation from './Confirmation';
 import Task from './Task';
 import Category from "./Category";
 import {useNavigate} from "react-router-dom";
@@ -15,6 +14,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
     // Do dodawania zadan
     const [visible, setVisible] = useState(false);
     const [spinner, setSpinner] = React.useState(false);
+    const [categories, setCategories] = React.useState([]);
     const handleClick = () => {
         setVisible(true);
     };
@@ -29,6 +29,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             navigate('/');
         }else{
             getTasks();
+            getCategories();
         }
     },[category]);
 
@@ -49,6 +50,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             }
         }).then((response)=>{
             setSpinner(false);
+            setTasks([]);
             setTasks(response.data);
         }).catch((error)=>{
             setSpinner(false);
@@ -56,12 +58,26 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         });
     }
 
+    const getCategories = () => {
+
+        axios.get('http://127.0.0.1:8000/api/get_categories/',{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response)=>{
+            setCategories(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        })
+
+    };
+
     return(
         <Box sx={{
             display:"flex",
             flexDirection:"column",
         }}>
-            <AddTask visible={visible} onClose={()=> setVisible(false)}/>
+            <AddTask visible={visible} onClose={()=> setVisible(false)} categories = {categories}/>
             <Category open={isOpenCategory} onClose = {handleCloseCategory}/>
             <Box sx={{
                 display:"flex",
@@ -74,7 +90,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             <div className={styles.tasks_panel}>
                 {spinner && (<Box sx={{mt:"2ch", mb:"2ch", display:"flex", justifyContent:"center",position:"absolute"}}><CircularProgress/></Box>)}
                 {tasks.map((task)=>(
-                    <Task id={task.idTask} title={task.title} description={task.description} date={task.deadline.substring(0,10)} priority={task.priority}></Task>
+                    <Task key={task.idTask} id={task.idTask} title={task.title} description={task.description} date={task.deadline.substring(0,10)} priority={task.priority} categories={categories}></Task>
                 ))}
                 <Box className={styles.task}>
                     <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center", width:"100%"}}>
