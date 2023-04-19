@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\TextUI\XmlConfiguration\File;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\FileUploader;
@@ -27,9 +29,15 @@ class UserController extends AbstractController
     public function getUserData(ManagerRegistry $doctrine, FileUploader $fileUploader): JsonResponse{
         $user = $this->getUser();
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
-//        $filePath = $fileUploader->getTargetDirectory().'/'.$userData['image'];
-//        $userData['image'] = new BinaryFileResponse($filePath);
         return $this->json($userData,200,['Content-type: application/json']);
+    }
+    #[Route('/api/user_image', name:'get_user_image', methods: 'GET')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function getUserImage(ManagerRegistry $doctrine, FileUploader $fileUploader): Response{
+        $user = $this->getUser();
+        $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
+        $filePath = $fileUploader->getTargetDirectory().'/'.$userData['image'];
+        return new BinaryFileResponse($filePath);
     }
     #[Route('/api/delete_account', name: 'delete_account', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
@@ -48,16 +56,23 @@ class UserController extends AbstractController
         $name = $decoded->name;
         $surname = $decoded->surname;
         $birthdate = DateTime::createFromFormat('Y-m-d',$decoded->birthdate);
-//        $decodedImage = base64_decode($decoded->image);
-//        $tempFilePath = tempnam(sys_get_temp_dir(),'image_');
-//        file_put_contents($tempFilePath, $decodedImage);
-//        $file = new UploadedFile($tempFilePath, 'image.jpg','image/jpeg',null,true);
-//        $fileName = $fileUploader->upload($file);
-//        $userData['image'] = $fileName;
         $userData['name'] = $name;
         $userData['surname'] = $surname;
         $userData['birthdate'] = $birthdate;
         $doctrine->getRepository(UserData::class)->updateUserData($user,$userData);
         return $this->json(['message'=>'User data saved successfully'],200,['Content-type: application/json']);
+    }
+    #[Route('/api/save_image', name:'save_image', methods: 'POST')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function saveUserImage(ManagerRegistry $doctrine, Request $request, FileUploader $fileUploader): JsonResponse{
+
+        $user = $this->getUser();
+        $file = $request->files->get('image');
+        if(!$file){
+            return $this->json(['message'=>'No file uploaded'],400,['Content-type: application/json']);
+        }
+        $fileName = $fileUploader->upload($file);
+        $doctrine->getRepository(UserData::class)->updateUserImage($user,$fileName);
+        return $this->json(['message'=>'Photo saved successfully'],200,['Content-type: application/json']);
     }
 }

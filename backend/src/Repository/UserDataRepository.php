@@ -56,6 +56,16 @@ class UserDataRepository extends ServiceEntityRepository
             ->setParameter('ID_user',$user->getIdUser())
             ->getQuery()
             ->execute();
-
+    }
+    public function updateUserImage(User $user, string $fileName): void{
+        $this->getEntityManager()
+            ->createQueryBuilder()
+            ->update(UserData::class,'ud')
+            ->set('ud.image',':new_image')
+            ->where('ud.idUser = :ID_user')
+            ->setParameter('new_image',$fileName)
+            ->setParameter('ID_user',$user->getIdUser())
+            ->getQuery()
+            ->execute();
     }
 }
