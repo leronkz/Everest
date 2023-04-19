@@ -2,10 +2,19 @@ controllers:
     resource: ../src/Controller/
     type: attribute
 
-app.swagger_ui:
-    path: /api/doc
-    methods: GET
-    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+#app.swagger_ui:
+#    path: /api/doc
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+#
+#app.swagger:
+#    path: /api/doc.json
+#    methods: GET
+#    defaults: { _controller: nelmio_api_doc.controller.swagger }
+#
+#swagger_ui:
+#    path: /api/doc
+#    controller: nelmio_api_doc.controller.swagger_ui
 
 api_login_check:
     path: /api/login_check
@@ -64,3 +73,13 @@ update_task:
     path: /api/update_task/{id}
     controller: App\Controller\TaskController::updateTask
     methods: [PUT]
+
+save_image:
+    path: /api/save_image
+    controller: App\Controller\UserController::saveUserImage
+    methods: [POST]
+
+get_user_image:
+    path: /api/user_image
+    controller: App\Controller\UserController::getUserImage
+    methods: [GET]
