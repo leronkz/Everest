@@ -16,7 +16,9 @@ import { Divider } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import {Link} from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
+import MenuIcon from '@mui/icons-material/Menu';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from "@mui/material/TextField";
 function getDate(){
     let date = new Date();
     return date;
@@ -75,6 +77,10 @@ const Search = styled('div')(({ theme }) => ({
 
 function Header({logoutAction,name}){
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [searchInput, setSearchInput] = React.useState('');
+    const tasks = [
+        {title:'Test'},
+    ];
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
          setAnchorEl(event.currentTarget);
@@ -86,9 +92,20 @@ function Header({logoutAction,name}){
     const handleLogout = () => {
         logoutAction();
     }
+
+    const changeSearchInput = (e) => {
+        setSearchInput(e.target.value);
+    }
     return (
         <div className={styles.top_bar}>
             <div className={styles.left_control}>
+               <div className={styles.open_nav}>
+                    <IconButton
+                        size='large'
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+               </div>
                   <Link to="/main">
                     <IconButton
                         size='large'
@@ -106,10 +123,29 @@ function Header({logoutAction,name}){
                     <SearchIconWrapper>
                         <SearchIcon/>
                     </SearchIconWrapper>
-                    <StyledInputBase 
-                        placeholder="Wyszukaj zadania..."
-                        inputProps={{'aria-label': 'search'}}
-                    />
+                    {/*<Autocomplete*/}
+                    {/*    freeSolo*/}
+                    {/*    id="free-solo"*/}
+                    {/*    disableClearable*/}
+                    {/*    options={tasks.map((task)=> task.title)}*/}
+                    {/*    sx={{width:"100%"}}*/}
+                    {/*    renderInput={(params) => (*/}
+                    {/*        <TextField*/}
+                    {/*            {...params}*/}
+                    {/*            label="Search input"*/}
+                    {/*            InputProps={{*/}
+                    {/*                ...params.InputProps,*/}
+                    {/*                type: 'search',*/}
+                    {/*            }}*/}
+                    {/*        />*/}
+                    {/*    )}*/}
+                    {/*    >*/}
+                        <StyledInputBase
+                            placeholder="Wyszukaj zadania..."
+                            inputProps={{'aria-label': 'search'}}
+                            onChange = {changeSearchInput}
+                        />
+                    {/*</Autocomplete>*/}
                 </Search>
             </div>
             <div className={styles.right_control}>

@@ -150,11 +150,11 @@ function Settings(){
                         <p className={styles.successText}>Hasło zostało pomyślnie zmienione</p>
                     }
                     <p className={styles.form_text}>Obecne hasło</p>
-                    <input id={styles.current_password} type="password" placeholder="********" onChange={handleOldPasswordChange}/>
+                    <input id={styles.current_password} type="password" placeholder="********" onChange={handleOldPasswordChange} required/>
                     <p className={styles.form_text}>Nowe hasło</p>
-                    <input id={styles.new_password} type="password" placeholder="********" onChange={handleNewPasswordChange}/>
+                    <input id={styles.new_password} type="password" placeholder="********" onChange={handleNewPasswordChange} required/>
                     <p className={styles.form_text}>Powtórz nowe hasło</p>
-                    <input id={styles.repeat_password} type="password" placeholder="********" onChange={handleRepeatPasswordChange}/>
+                    <input id={styles.repeat_password} type="password" placeholder="********" onChange={handleRepeatPasswordChange} required/>
                     <button id={styles.change_button} type="submit" disabled={isSubmitting}>Zapisz</button>
                 </form>
                 <button id={styles.delete_account_btn} type="button" onClick={handleOpen}>Usuń konto</button>

@@ -43,4 +43,21 @@
 .icon_button_rotated{
     transform: rotate(180deg);
 }
+@media only screen and (max-device-width: 800px) {
+    .task{
+        width:100%;
+    }
+    .task_text{
+        font-size: 15px;
+        line-height: 20px;
+    }
+    .task_header{
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .task_body_text{
+        font-size: 13px;
+    }
 
+}

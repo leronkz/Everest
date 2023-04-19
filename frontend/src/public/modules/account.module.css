@@ -84,3 +84,29 @@
     height:fit-content;
     width:50%;
 }
+@media only screen and (max-device-width: 800px) {
+
+    .main{
+        flex-direction: column;
+    }
+
+    .account_form{
+        width:100%;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .picture{
+        width:150px;
+        height: 150px;
+    }
+    .profile_picture{
+        margin-bottom:3ch;
+    }
+    .account_data{
+        width:70%;
+    }
+    #change_button{
+        width:60%;
+    }
+}

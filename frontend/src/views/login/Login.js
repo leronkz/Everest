@@ -70,6 +70,7 @@ function Login() {
                             <input id={styles.passwordInput} placeholder="haslo" type="password" name="password" required onChange={handlePasswordChange}/>
                             {spinner && (<Box sx={{mt:"2ch", display:"flex", justifyContent:"center"}}><CircularProgress/></Box>)}
                             <button id={styles.loginButton}  type="submit" disabled={isSubmitting}>Zaloguj się</button>
+                            <Link className={styles.link} to="/register"><button id={styles.registerButtonMobile} type="button">Załóż konto</button></Link>
                         </form>
                     </div>
                     <div className={styles.registerPanel}>

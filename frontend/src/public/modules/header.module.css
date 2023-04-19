@@ -65,3 +65,17 @@
     display:flex;
     flex-direction:column;
 }
+.open_nav{
+    display:none;
+}
+@media only screen and (max-device-width: 800px) {
+    #date_header{
+        display: none;
+    }
+    .center_control{
+       display: none;
+    }
+    .open_nav{
+        display: flex;
+    }
+}

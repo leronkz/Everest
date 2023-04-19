@@ -98,3 +98,20 @@
     color: green;
     text-align: center;
 }
+@media only screen and (max-device-width: 800px) {
+    .change_form{
+        width:90%;
+    }
+    .form_text{
+        font-size: 16px;
+    }
+    #delete_account_btn{
+        width:60%;
+    }
+    .errorText{
+        font-size: 12px;
+    }
+    .successText{
+        font-size: 15px;
+    }
+}

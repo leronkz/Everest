@@ -102,7 +102,7 @@ function Navbar({handleClick, handleOpen}){
                     width: "305px",
                     flexShrink: 0,
                     '& .MuiDrawer-paper': {
-                        width: "305px",
+                        width: "230px",
                         boxSizing: 'border-box',
                         background: '#FFE8FC',
                         zIndex:"auto",

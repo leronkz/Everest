@@ -89,3 +89,25 @@
     background: #55db52;
     color: white;
 }
+@media only screen and (max-device-width: 800px) {
+    .add_task_container{
+        width:90%;
+    }
+    .text{
+        font-size: 18px;
+    }
+    #task_save_btn{
+        width:50%;
+        font-size: 15px;
+    }
+    #task_date{
+        width:80%;
+    }
+    .form_wrapper{
+        width:90%;
+        height:fit-content;
+    }
+    .secondary_text{
+        font-size: 15px;
+    }
+}

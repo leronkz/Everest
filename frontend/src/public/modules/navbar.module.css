@@ -1,6 +1,5 @@
 .navbar{
-    width:305px;
-    /*gap: var(--reactist-spacing-large);*/
+    width:230px;
     height: 100vh;
     background:#FFE8FC;
 }
@@ -46,4 +45,19 @@
 
 .icon_button_rotated{
     transform: rotate(180deg);
+}
+
+@media only screen and (max-device-width: 800px) {
+    .navbar{
+        z-index: 1;
+        position: fixed;
+        left:0;
+        top:0;
+        transform: translateX(-230px);
+        transition: transform 0.2s;
+    }
+    .text{
+        font-size: 20px;
+    }
+
 }

@@ -29,3 +29,11 @@
     color: #000000;
     position:fixed;
 }
+@media only screen and (max-device-width: 800px) {
+    .add_category_container{
+        width:80%;
+    }
+    .text{
+        font-size: 14px;
+    }
+}

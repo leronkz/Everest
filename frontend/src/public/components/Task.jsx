@@ -88,7 +88,7 @@ function Task(props){
                     <p className={styles.task_text}>{title}</p>
                 </Box>
                 <CircleIcon sx={{color: priority_color, border:"2px solid", borderColor: priority_color, borderRadius:"50%"}}/>
-                <Box>
+                <Box sx={{display:"flex"}}>
                     <Tooltip title= {visible ? "Zwiń" : "Pokaż"}>
                         <IconButton 
                             size="medium"

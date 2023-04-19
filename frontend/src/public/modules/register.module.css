@@ -140,3 +140,77 @@ input{
     width: 100%;
     color: green;
 }
+#loginButtonMobile{
+    visibility: hidden;
+}
+@media only screen and (max-device-width: 800px){
+
+    .container{
+        display:flex;
+        flex-direction:column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .registerPanel{
+        display:none;
+    }
+
+    .mainText{
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        color: #000000;
+    }
+    .firstText{
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        color: #FFFFFF;
+    }
+    .secondText{
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        color: #FFFFFF;
+    }
+    #registerButton{
+        border: 3px solid #32CE2F;
+        border-radius: 30px;
+        width: 100%;
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        align-self:center;
+        color: #000000;
+        margin-top: 2em;
+        cursor: pointer;
+    }
+    input{
+        font-size: 13px;
+    }
+    #loginButtonMobile{
+        visibility: visible;
+        background: #CDB225;
+        border: 3px solid #D6DA2C;
+        border-radius: 30px;
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        color: #FFFFFF;
+        margin-top: 2em;
+        width: 80%;
+        cursor: pointer;
+    }
+    .successText .errorText {
+        font-size: 13px;
+    }
+    #logo{
+        width: 90%;
+    }
+}
