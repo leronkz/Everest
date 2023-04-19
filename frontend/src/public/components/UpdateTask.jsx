@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import {Box, Divider, IconButton, MenuItem, Tooltip} from "@mui/material";
 import styles from "../modules/add_task.module.css";
-import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import TextField from "@mui/material/TextField";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -13,7 +12,7 @@ import Select from "@mui/material/Select";
 
 function UpdateTask(props){
 
-    let {id, title, description, deadline, priority, category, visible, onClose, categories} = props;
+    let {id, title, description, deadline, priority, category, visible, onClose, categories, handleOpenSuccessSnackbar, handleOpenErrorSnackbar} = props;
 
     const [task_title,setTitle] = React.useState(title);
     const [task_description, setDescription] = React.useState(description);
@@ -51,11 +50,9 @@ function UpdateTask(props){
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then((response)=>{
-            // handleSuccessSnackbarClick();
-            console.log(response.data);
+            handleOpenSuccessSnackbar();
         }).catch((error)=>{
-            // handleErrorSnackbarClick();
-            console.log(error.data);
+            handleOpenErrorSnackbar();
         });
     }
 
