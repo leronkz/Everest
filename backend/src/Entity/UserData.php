@@ -2,6 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\Controller\UserController;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +15,54 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user_data", indexes={@ORM\Index(name="user_data_user_ID_user_fk", columns={"ID_user"})})
  * @ORM\Entity(repositoryClass="App\Repository\UserDataRepository")
  */
+
+#[ApiResource(operations:[
+    new Get(
+        name: 'get_user',
+        uriTemplate: '/user',
+        controller: UserController::class,
+        openapiContext: [
+            'summary' => 'Retrieves user data',
+            'description' => 'Retrieves user data',
+        ]
+    ),
+    new Get(
+        name: 'get_user_image',
+        uriTemplate: '/user_image',
+        controller: UserController::class,
+        openapiContext: [
+            'summary' => 'Retrieves user profile picture',
+            'description' => 'Retrieves user profile picture',
+        ]
+    ),
+    new Get(
+        name: 'delete_account',
+        uriTemplate: '/delete_account',
+        controller: UserController::class,
+        openapiContext: [
+            'summary' => 'Deletes user',
+            'description' => 'Deletes user',
+        ]
+    ),
+    new Post(
+        name: 'save_user_data',
+        uriTemplate: '/save_user',
+        controller: UserController::class,
+        openapiContext: [
+            'summary' => 'Creates/updates user data',
+            'description' => 'Retrieves tasks by category',
+        ]
+    ),
+    new Post(
+        name: 'save_image',
+        uriTemplate: '/save_image',
+        controller: UserController::class,
+        openapiContext: [
+            'summary' => 'Saves user profile picture',
+            'description' => 'Saves user profile picture',
+        ]
+    )
+])]
 class UserData
 {
     /**

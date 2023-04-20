@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use App\Controller\CategoryController;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +14,35 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="category", indexes={@ORM\Index(name="category_user_ID_user_fk", columns={"ID_user"})})
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
+#[ApiResource(operations:[
+    new Get(
+        name: 'get_categories',
+        uriTemplate: '/get_categories',
+        controller: CategoryController::class,
+        openapiContext: [
+            'summary' => 'Retrieves category',
+            'description' => 'Retrieves category',
+        ]
+    ),
+    new Post(
+        name: 'add_category',
+        uriTemplate: '/add_category',
+        controller: CategoryController::class,
+        openapiContext: [
+            'summary' => 'Creates a new category',
+            'description' => 'Creates a new category',
+        ]
+    ),
+    new Post(
+        name: 'delete_category',
+        uriTemplate: '/delete_category',
+        controller: CategoryController::class,
+        openapiContext: [
+            'summary' => 'Deletes category',
+            'description' => 'Deletes category',
+        ]
+    ),
+])]
 class Category
 {
     /**

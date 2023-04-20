@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use App\Controller\SecurityController;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,6 +14,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})})
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
+#[ApiResource(operations:[
+    new Post(
+        name: 'register',
+        uriTemplate: '/register',
+        controller: SecurityController::class,
+        openapiContext: [
+            'summary' => 'Creates a new user',
+            'description' => 'Creates a new user',
+        ]
+    ),
+    new Post(
+        name: 'change_password',
+        uriTemplate: '/change_password',
+        controller: SecurityController::class,
+        openapiContext: [
+            'summary' => 'Changes user password',
+            'description' => 'Changes user password',
+        ]
+    )
+])]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
