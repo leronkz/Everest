@@ -2,22 +2,13 @@ controllers:
     resource: ../src/Controller/
     type: attribute
 
-#app.swagger_ui:
-#    path: /api/doc
-#    methods: GET
-#    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
-#
-#app.swagger:
-#    path: /api/doc.json
-#    methods: GET
-#    defaults: { _controller: nelmio_api_doc.controller.swagger }
-#
-#swagger_ui:
-#    path: /api/doc
-#    controller: nelmio_api_doc.controller.swagger_ui
-
 api_login_check:
     path: /api/login_check
+
+register:
+    path: /api/register
+    controller: App\Controller\SecurityController::registerUser
+    methods: [POST]
 
 get_user:
     path: /api/user
@@ -82,4 +73,9 @@ save_image:
 get_user_image:
     path: /api/user_image
     controller: App\Controller\UserController::getUserImage
+    methods: [GET]
+
+delete_image:
+    path: /api/delete_image
+    controller: App\Controller\UserController::deleteUserImage
     methods: [GET]

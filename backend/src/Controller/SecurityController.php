@@ -23,7 +23,7 @@ use App\Entity\User;
 class SecurityController extends AbstractController
 {
     #[Route('/register', name: 'register', methods: 'POST')]
-    public function register(ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function registerUser(ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $decoded = json_decode($request->getContent());
         $email = $decoded->email;
