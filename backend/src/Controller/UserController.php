@@ -4,11 +4,9 @@ namespace App\Controller;
 
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
-use PHPUnit\TextUI\XmlConfiguration\File;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -27,7 +25,7 @@ class UserController extends AbstractController
 {
     #[Route('/api/user', name:'get_user', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
-    public function getUserData(ManagerRegistry $doctrine, FileUploader $fileUploader): JsonResponse{
+    public function getUserData(ManagerRegistry $doctrine): JsonResponse{
         $user = $this->getUser();
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
         return $this->json($userData,200,['Content-type: application/json']);
@@ -37,8 +35,13 @@ class UserController extends AbstractController
     public function getUserImage(ManagerRegistry $doctrine, FileUploader $fileUploader): Response{
         $user = $this->getUser();
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
-        $filePath = $fileUploader->getTargetDirectory().'/'.$userData['image'];
-        return new BinaryFileResponse($filePath);
+        if(!is_null($userData['image']) && $userData['image'] != "") {
+            $filePath = $fileUploader->getTargetDirectory() . '/' . $userData['image'];
+            return new BinaryFileResponse($filePath,200,[['Cache-Control'=>'no-cache']]);
+        }
+        else{
+            return new Response('No file found',400,['Content-type: application/json']);
+        }
     }
     #[Route('/api/delete_account', name: 'delete_account', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
@@ -73,7 +76,29 @@ class UserController extends AbstractController
             return $this->json(['message'=>'No file uploaded'],400,['Content-type: application/json']);
         }
         $fileName = $fileUploader->upload($file);
+        $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
+        if(!is_null($userData['image']) && $userData['image'] != "") {
+            $oldFilePath = $fileUploader->getTargetDirectory() . '/' . $userData['image'];
+            unlink($oldFilePath);
+        }
         $doctrine->getRepository(UserData::class)->updateUserImage($user,$fileName);
         return $this->json(['message'=>'Photo saved successfully'],200,['Content-type: application/json']);
+    }
+    #[Route('/delete_image', name:'delete_image', methods: 'GET')]
+    #[Security("is_granted('ROLE_USER')")]
+    public function deleteUserImage(ManagerRegistry $doctrine, FileUploader $fileUploader): JsonResponse{
+
+        $user = $this->getUser();
+        $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
+        $fileName = $fileUploader->getTargetDirectory().'/'.$userData['image'];
+        if(!is_null($userData['image']) && $userData['image'] != "") {
+            try {
+                unlink($fileName);
+                $doctrine->getRepository(UserData::class)->updateUserImage($user, "");
+            } catch (\Exception $e) {
+                return $this->json(['message' => 'Failed to delete file'], 400, ['Content-type: application/json']);
+            }
+        }
+        return $this->json(['message'=>'File deleted successfully'],200,['Content-type: application/json']);
     }
 }
