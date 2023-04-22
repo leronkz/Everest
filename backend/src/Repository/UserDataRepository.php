@@ -27,7 +27,7 @@ class UserDataRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-        public function getUserData(User $user): Array{
+    public function getUserData(User $user): Array{
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('ud.name', 'ud.surname', 'ud.birthDate','ud.image')
