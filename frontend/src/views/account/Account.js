@@ -5,10 +5,11 @@ import Button from '@mui/material/Button';
 import BasicPhoto from './basic_photo.svg';
 import {useNavigate} from "react-router-dom";
 import axios from 'axios';
-
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from '@mui/material/Snackbar';
-
+import IconButton from '@mui/material/IconButton';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Confirmation from "../../public/components/Confirmation";
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
@@ -21,6 +22,12 @@ function Account({photo}){
     const [birthdate,setBirthdate] = React.useState('');
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
+    const [openImageSuccessSnackbar,setOpenImageSuccessSnackbar] = React.useState(false);
+    const [openImageErrorSnackbar,setOpenImageErrorSnackbar] = React.useState(false);
+    const [openLoadErrorSnackbar,setOpenLoadErrorSnackbar] = React.useState(false);
+    const [openDeleteSuccessSnackbar,setOpenDeleteSuccessSnackbar] = React.useState(false);
+    const [openDeleteErrorSnackbar,setOpenDeleteErrorSnackbar] = React.useState(false);
+    const [openConfirmation, setOpenConfirmation] = React.useState(false);
     const handleNameChange = (e) =>{
         setName(e.target.value);
     }
@@ -50,26 +57,33 @@ function Account({photo}){
     const handleErrorSnackbarClick = () => {
         setOpenErrorSnackbar(true);
     }
+    const handleImageSuccessSnackbarClick = () => {
+        setOpenImageSuccessSnackbar(true);
+    }
+    const handleImageErrorSnackbarClick = () => {
+        setOpenImageErrorSnackbar(true);
+    }
+    const handleLoadErrorSnackbarClick = () => {
+        setOpenLoadErrorSnackbar(true);
+    }
     const handleClose = (event, reason) => {
         if(reason === 'clickaway'){
             return;
         }
         setOpenSuccessSnackbar(false);
         setOpenErrorSnackbar(false);
+        setOpenImageSuccessSnackbar(false);
+        setOpenImageErrorSnackbar(false);
+        setOpenLoadErrorSnackbar(false);
+        setOpenDeleteSuccessSnackbar(false);
+        setOpenDeleteErrorSnackbar(false);
     }
-    // const fileReader = new FileReader();
-    // fileReader.onload = function (event) {
-    //     const binaryData = event.target.result;
-    //     const blob = new Blob([binaryData], {type:'image/jpeg'});
-    //     const imageUrl = URL.createObjectURL(blob);
-    //     setPhotoUrl(imageUrl);
-    //     console.log(imageUrl);
-    // }
 
     useEffect(()=>{
         if(localStorage.getItem('token') === "" || localStorage.getItem('token') == null){
             navigate('/');
         }else{
+            getUserImage();
             getUser();
         }
     },[]);
@@ -83,7 +97,44 @@ function Account({photo}){
             setName(response.data.name);
             setSurname(response.data.surname);
             setBirthdate(response.data.birthDate.slice(0,10));
-            // fileReader.readAsArrayBuffer(response.data.image);
+        }).catch(error=>{
+            handleLoadErrorSnackbarClick();
+        })
+
+        // axios.get('http://127.0.0.1:8000/api/user_image',{
+        //     headers:{
+        //         Authorization: 'Bearer ' + localStorage.getItem('token')
+        //     },
+        //     responseType: 'blob'
+        // }).then(response=>{
+        //         const reader = new FileReader();
+        //         reader.onloadend = () => {
+        //             const fileData = reader.result;
+        //             setPhotoUrl(fileData);
+        //         }
+        //         reader.readAsDataURL(response.data);
+        // }).catch(error=>{
+        //     setPhotoUrl('');
+        //     handleLoadErrorSnackbarClick();
+        // })
+    }
+    const getUserImage = () => {
+        axios.get('http://127.0.0.1:8000/api/user_image',{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            },
+            responseType: 'blob'
+        }).then(response=>{
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const fileData = reader.result;
+                console.log(fileData);
+                setPhotoUrl(fileData);
+            }
+            reader.readAsDataURL(response.data);
+        }).catch(error=>{
+            setPhotoUrl('');
+            handleLoadErrorSnackbarClick();
         })
     }
     const handleLogout = () => {
@@ -98,9 +149,10 @@ function Account({photo}){
         const data={
             name:name,
             surname:surname,
-            birthdate:birthdate,
-            image: photo_url
+            birthdate:birthdate
         };
+        const formData = new FormData();
+        formData.append("image",image);
         axios.post('http://127.0.0.1:8000/api/save_user',data, {
             headers:{
                 'Content-type': 'application/json',
@@ -111,10 +163,35 @@ function Account({photo}){
         }).catch(error=>{
             handleErrorSnackbarClick();
         });
+        axios.post('http://127.0.0.1:8000/api/save_image',formData, {
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                'Content-type': 'multipart/form-data'
+            }
+        }).then(response=>{
+            handleImageSuccessSnackbarClick();
+        }).catch(error=>{
+            handleImageErrorSnackbarClick();
+        });
     }
+
+    const deleteImage = () => {
+        axios.get('http://127.0.0.1:8000/api/delete_image', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then(response=>{
+                setPhotoUrl('');
+                setImage(null);
+                setOpenDeleteSuccessSnackbar(true);
+        }).catch(error=>{
+                setOpenDeleteErrorSnackbar(true);
+        })
+    };
 
     return(
         <div className={styles.container}>
+            <Confirmation open={openConfirmation} onClose={()=> setOpenConfirmation(false)} handleDelete={()=> {deleteImage(); setOpenConfirmation(false)}}/>
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
                     Dane zostały pomyślnie zapisane
@@ -125,11 +202,44 @@ function Account({photo}){
                     Nie udało się zapisać danych
                 </Alert>
             </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openImageSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
+                    Zdjęcie zostało pomyślnie zmienione
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openImageErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się zmienić zdjęcia
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openLoadErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się pobrać danych o użytkowniku
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openDeleteSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
+                    Zdjęcie zostało pomyślnie usunięte
+                </Alert>
+            </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openDeleteErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się usunąć zdjęcia
+                </Alert>
+            </Snackbar>
             <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')}/></header>
             <main className={styles.main}>
                 <form className={styles.account_form} encType='multipart/form-data' onSubmit={handleSubmit}>
                     <div className={styles.profile_picture}>
-                            <div className={styles.picture} style={{backgroundImage:`url(${photo_url})`}}></div>
+                            <div className={styles.picture} style={{backgroundImage:`url(${photo_url})`}} key={new Date().getTime()}>
+                                <IconButton
+                                    size="large"
+                                    sx={{color: "red", visibility:(photo_url.length===0 ? "hidden" : "visible")}}
+                                    onClick={()=>setOpenConfirmation(true)}
+                                >
+                                    <DeleteForeverIcon/>
+                                </IconButton>
+                            </div>
                             <Button variant="contained" component="label">
                                 Wybierz zdjęcie
                                 <input hidden accept="image/*" type="file" onChange={previewPhoto}/>
@@ -149,7 +259,6 @@ function Account({photo}){
         </div>
 
     );
-
 }
 
 export default Account;
