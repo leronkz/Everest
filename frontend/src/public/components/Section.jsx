@@ -123,7 +123,6 @@ function Section({category, isOpenCategory, handleCloseCategory}){
                 <p className={styles.category_name}>{category}</p>
             </Box>
             <Divider/>
-            {/* Dodac overflow gdy jest duzo zdan */}
             <div className={styles.tasks_panel}>
                 {spinner && (<Box sx={{mt:"2ch", mb:"2ch", display:"flex", justifyContent:"center",position:"absolute"}}><CircularProgress/></Box>)}
                 {tasks.map((task)=>(
