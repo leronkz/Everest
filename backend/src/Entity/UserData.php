@@ -44,6 +44,24 @@ use Doctrine\ORM\Mapping as ORM;
             'description' => 'Deletes user',
         ]
     ),
+    new Get(
+        name: 'get_user_image',
+        uriTemplate: '/user_image',
+        controller: UserController::class,
+        openapiContext: [
+            'summary'=>'Gets user profile picture',
+            'descrription' => 'Gets user profile picture',
+        ]
+    ),
+    new Get(
+        name: 'delete_image',
+        uriTemplate: '/delete_image',
+        controller: UserController::class,
+        openapiContext:[
+            'summary'=>'Deletes user profile picture',
+            'description' => 'Deletes user profile picture',
+        ]
+    ),
     new Post(
         name: 'save_user_data',
         uriTemplate: '/save_user',
