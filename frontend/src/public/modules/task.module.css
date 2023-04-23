@@ -2,7 +2,7 @@
     background: #fff5ff;
     border-radius: 30px;
     width:60%;
-    display:flex;
+    /*display:flex;*/
     flex-direction: column;
     margin-bottom: 1em;
 }
@@ -42,6 +42,14 @@
 
 .icon_button_rotated{
     transform: rotate(180deg);
+}
+#undoButton{
+    margin-left:20px;
+    color:black;
+}
+#undoButton:active{
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
 @media only screen and (max-device-width: 800px) {
     .task{
