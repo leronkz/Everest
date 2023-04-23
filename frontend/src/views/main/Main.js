@@ -26,7 +26,6 @@ function Main(){
         }).then((response)=>{
                 setUserData(response.data);
                 localStorage.setItem('username',response.data.name);
-                // console.log(userData.name);
         })
     }
     const handleLogout = () => {
