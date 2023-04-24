@@ -126,7 +126,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             <div className={styles.tasks_panel}>
                 {spinner && (<Box sx={{mt:"2ch", mb:"2ch", display:"flex", justifyContent:"center",position:"absolute"}}><CircularProgress/></Box>)}
                 {tasks.map((task)=>(
-                    <Task key={task.idTask} id={task.idTask} title={task.title} description={task.description} date={task.deadline.substring(0,10)} priority={task.priority} categories={categories} handleOpenSuccessSnackbar={handleOpenESuccessSnackbar} handleOpenErrorSnackbar={handleOpenEErrorSnackbar}></Task>
+                    <Task key={task.idTask} id={task.idTask} title={task.title} description={task.description} date={task.deadline.substring(0,10)} priority={task.priority} categories={categories} category={task.categoryName} handleOpenSuccessSnackbar={handleOpenESuccessSnackbar} handleOpenErrorSnackbar={handleOpenEErrorSnackbar}></Task>
                 ))}
                 <Box className={styles.task}>
                     <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center", width:"100%"}}>

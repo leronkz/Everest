@@ -28,6 +28,7 @@ function Category(props){
             }
         }).then(response=>{
                 handleOpenSuccessSnackbar();
+                onClose();
         }).catch(error=>{
                 handleOpenErrorSnackbar();
         });
