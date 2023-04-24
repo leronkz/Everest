@@ -32,7 +32,7 @@ class TaskRepository extends ServiceEntityRepository
     public function getTasksByCategory(User $user, Category $category): ?Array{
        return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline")
+            ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline", "c.categoryName")
             ->from(Task::class,"t")
             ->join(User::class,"u",'WITH',"t.idUser = u.idUser")
             ->join(Category::class,"c",'WITH',"t.idCategory = c.idCategory")
@@ -46,9 +46,10 @@ class TaskRepository extends ServiceEntityRepository
     public function getAllTasks(User $user): ?Array{
         return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline")
+            ->select("t.idTask", "t.title", "t.description", "t.priority", "t.deadline", "c.categoryName")
             ->from(Task::class,"t")
             ->join(User::class,"u","WITH","t.idUser = u.idUser")
+            ->leftJoin(Category::class,"c","WITH","t.idCategory = c.idCategory")
             ->where('u.idUser = :ID_user')
             ->setParameter('ID_user',$user)
             ->getQuery()
