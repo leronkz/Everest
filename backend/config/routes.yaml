@@ -71,7 +71,7 @@ save_image:
     methods: [POST]
 
 get_user_image:
-    path: /api/user_image
+    path: /api/user_image/{id}
     controller: App\Controller\UserController::getUserImage
     methods: [GET]
 
