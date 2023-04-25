@@ -20,11 +20,13 @@ function Account({photo}){
     const [name,setName] = React.useState('');
     const [surname, setSurname] = React.useState('');
     const [birthdate,setBirthdate] = React.useState('');
+    const [isImage, setIsImage] = React.useState(false);
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
     const [openImageSuccessSnackbar,setOpenImageSuccessSnackbar] = React.useState(false);
     const [openImageErrorSnackbar,setOpenImageErrorSnackbar] = React.useState(false);
     const [openLoadErrorSnackbar,setOpenLoadErrorSnackbar] = React.useState(false);
+    const [openLoadImageErrorSnackbar,setOpenLoadImageErrorSnackbar] = React.useState(false);
     const [openDeleteSuccessSnackbar,setOpenDeleteSuccessSnackbar] = React.useState(false);
     const [openDeleteErrorSnackbar,setOpenDeleteErrorSnackbar] = React.useState(false);
     const [openConfirmation, setOpenConfirmation] = React.useState(false);
@@ -77,65 +79,50 @@ function Account({photo}){
         setOpenLoadErrorSnackbar(false);
         setOpenDeleteSuccessSnackbar(false);
         setOpenDeleteErrorSnackbar(false);
+        setOpenLoadImageErrorSnackbar(false);
     }
 
     useEffect(()=>{
         if(localStorage.getItem('token') === "" || localStorage.getItem('token') == null){
             navigate('/');
         }else{
-            getUserImage();
             getUser();
         }
     },[]);
 
     const getUser = () => {
-        axios.get('http://127.0.0.1:8000/api/user',{
-            headers:{
+        axios.get('http://127.0.0.1:8000/api/user', {
+            headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
-        }).then((response)=>{
+        }).then((response) => {
             setName(response.data.name);
             setSurname(response.data.surname);
-            setBirthdate(response.data.birthDate.slice(0,10));
-        }).catch(error=>{
+            setBirthdate(response.data.birthDate.slice(0, 10));
+            getUserImage(response.data.idUser);
+        }).catch(error => {
             handleLoadErrorSnackbarClick();
-        })
-
-        // axios.get('http://127.0.0.1:8000/api/user_image',{
-        //     headers:{
-        //         Authorization: 'Bearer ' + localStorage.getItem('token')
-        //     },
-        //     responseType: 'blob'
-        // }).then(response=>{
-        //         const reader = new FileReader();
-        //         reader.onloadend = () => {
-        //             const fileData = reader.result;
-        //             setPhotoUrl(fileData);
-        //         }
-        //         reader.readAsDataURL(response.data);
-        // }).catch(error=>{
-        //     setPhotoUrl('');
-        //     handleLoadErrorSnackbarClick();
-        // })
+        });
     }
-    const getUserImage = () => {
-        axios.get('http://127.0.0.1:8000/api/user_image',{
-            headers:{
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            },
-            responseType: 'blob'
-        }).then(response=>{
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const fileData = reader.result;
-                console.log(fileData);
-                setPhotoUrl(fileData);
-            }
-            reader.readAsDataURL(response.data);
-        }).catch(error=>{
-            setPhotoUrl('');
-            handleLoadErrorSnackbarClick();
-        })
+    const getUserImage = (idUser) => {
+            axios.get(`http://127.0.0.1:8000/api/user_image/${idUser}`,{
+                headers:{
+                    Authorization: 'Bearer ' + localStorage.getItem('token')
+                },
+                responseType: 'blob'
+            }).then(response=>{
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const fileData = reader.result;
+                    setPhotoUrl(fileData);
+                }
+                reader.readAsDataURL(response.data);
+                setIsImage(true);
+            }).catch(error=>{
+                setPhotoUrl('');
+                setOpenLoadImageErrorSnackbar(true);
+                setIsImage(false);
+            })
     }
     const handleLogout = () => {
         localStorage.setItem('token',"");
@@ -152,7 +139,8 @@ function Account({photo}){
             birthdate:birthdate
         };
         const formData = new FormData();
-        formData.append("image",image);
+        if(image !== null)
+            formData.append("image", image);
         axios.post('http://127.0.0.1:8000/api/save_user',data, {
             headers:{
                 'Content-type': 'application/json',
@@ -163,16 +151,20 @@ function Account({photo}){
         }).catch(error=>{
             handleErrorSnackbarClick();
         });
-        axios.post('http://127.0.0.1:8000/api/save_image',formData, {
-            headers:{
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-                'Content-type': 'multipart/form-data'
-            }
-        }).then(response=>{
-            handleImageSuccessSnackbarClick();
-        }).catch(error=>{
-            handleImageErrorSnackbarClick();
-        });
+        if(!formData.entries().next().done) {
+            axios.post('http://127.0.0.1:8000/api/save_image', formData, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                    'Content-type': 'multipart/form-data'
+                }
+            }).then(response => {
+                handleImageSuccessSnackbarClick();
+                setIsImage(true);
+            }).catch(error => {
+                handleImageErrorSnackbarClick();
+                setIsImage(false);
+            });
+        }
     }
 
     const deleteImage = () => {
@@ -184,8 +176,10 @@ function Account({photo}){
                 setPhotoUrl('');
                 setImage(null);
                 setOpenDeleteSuccessSnackbar(true);
+                setIsImage(false);
         }).catch(error=>{
                 setOpenDeleteErrorSnackbar(true);
+                setIsImage(true);
         })
     };
 
@@ -217,6 +211,11 @@ function Account({photo}){
                     Nie udało się pobrać danych o użytkowniku
                 </Alert>
             </Snackbar>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openLoadImageErrorSnackbar} autoHideDuration={2000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{width:"100%"}}>
+                    Nie udało się załadować zdjęcia profilowego
+                </Alert>
+            </Snackbar>
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openDeleteSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
                     Zdjęcie zostało pomyślnie usunięte
@@ -234,7 +233,7 @@ function Account({photo}){
                             <div className={styles.picture} style={{backgroundImage:`url(${photo_url})`}} key={new Date().getTime()}>
                                 <IconButton
                                     size="large"
-                                    sx={{color: "red", visibility:(photo_url.length===0 ? "hidden" : "visible")}}
+                                    sx={{color: "red", visibility:(isImage===true ? "visible" : "hidden")}}
                                     onClick={()=>setOpenConfirmation(true)}
                                 >
                                     <DeleteForeverIcon/>
