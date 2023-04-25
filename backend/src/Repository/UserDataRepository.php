@@ -30,7 +30,7 @@ class UserDataRepository extends ServiceEntityRepository
     public function getUserData(User $user): Array{
         return $this->getEntityManager()
             ->createQueryBuilder()
-            ->select('ud.name', 'ud.surname', 'ud.birthDate','ud.image')
+            ->select('ud.name', 'ud.surname', 'ud.birthDate','ud.image', "u.idUser")
             ->from(UserData::class, 'ud')
             ->join(User::class,'u','WITH','ud.idUser = u.idUser')
             ->where('u.idUser = :ID_user')

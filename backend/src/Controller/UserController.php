@@ -30,14 +30,29 @@ class UserController extends AbstractController
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
         return $this->json($userData,200,['Content-type: application/json']);
     }
-    #[Route('/api/user_image', name:'get_user_image', methods: 'GET')]
+    #[Route('/api/user_image/{id}', name:'get_user_image', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
-    public function getUserImage(ManagerRegistry $doctrine, FileUploader $fileUploader): Response{
-        $user = $this->getUser();
+    public function getUserImage(ManagerRegistry $doctrine, FileUploader $fileUploader, int $id): Response{
+        $user = $doctrine->getRepository(User::class)->find($id);
         $userData = $doctrine->getRepository(UserData::class)->getUserData($user);
         if(!is_null($userData['image']) && $userData['image'] != "") {
             $filePath = $fileUploader->getTargetDirectory() . '/' . $userData['image'];
-            return new BinaryFileResponse($filePath,200,[['Cache-Control'=>'no-cache']]);
+            $response = new BinaryFileResponse($filePath,200);
+            $response->setCache([
+                'must_revalidate'  => false,
+                'no_cache'         => false,
+                'no_store'         => false,
+                'no_transform'     => false,
+                'public'           => true,
+                'private'          => false,
+                'proxy_revalidate' => false,
+                'max_age'          => 0,
+                's_maxage'         => 0,
+                'immutable'        => true,
+                'last_modified'    => new \DateTime(),
+                'etag'             => 'abcdef'
+            ]);
+            return $response;
         }
         else{
             return new Response('No file found',400,['Content-type: application/json']);
