@@ -28,12 +28,19 @@ use Doctrine\ORM\Mapping as ORM;
     ),
     new Get(
         name: 'get_user_image',
-        uriTemplate: '/user_image',
+        uriTemplate: '/user_image/{id}',
         controller: UserController::class,
         openapiContext: [
             'summary' => 'Retrieves user profile picture',
             'description' => 'Retrieves user profile picture',
-        ]
+            'parameters' => [
+                'name' => 'id',
+                'in' => 'path',
+                'required' => true,
+                'type' => 'int',
+                'description' => 'User ID'
+            ],
+        ],
     ),
     new Get(
         name: 'delete_account',
@@ -42,15 +49,6 @@ use Doctrine\ORM\Mapping as ORM;
         openapiContext: [
             'summary' => 'Deletes user',
             'description' => 'Deletes user',
-        ]
-    ),
-    new Get(
-        name: 'get_user_image',
-        uriTemplate: '/user_image',
-        controller: UserController::class,
-        openapiContext: [
-            'summary'=>'Gets user profile picture',
-            'descrription' => 'Gets user profile picture',
         ]
     ),
     new Get(
