@@ -34,6 +34,7 @@
 }
 .center_control{
     align-self: center;
+    width:33%;
 }
 .right_control{
     width:33%;
@@ -68,6 +69,12 @@
 .open_nav{
     display:none;
 }
+.open_nav_hidden{
+    display:none;
+}
+#autocompleteSearch{
+    border-radius:30px;
+}
 @media only screen and (max-device-width: 800px) {
     #date_header{
         display: none;
@@ -77,5 +84,8 @@
     }
     .open_nav{
         display: flex;
+    }
+    .open_nav_hidden{
+        display:none;
     }
 }

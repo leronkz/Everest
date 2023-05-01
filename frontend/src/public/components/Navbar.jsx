@@ -14,7 +14,7 @@ let Icon = () => <KeyboardArrowUpOutlinedIcon/>
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
-function Navbar({handleClick, handleOpen}){
+function Navbar({handleClick, handleOpen, isOpenNavbar}){
     const navigate = useNavigate();
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
@@ -85,7 +85,7 @@ function Navbar({handleClick, handleOpen}){
     };
 
     return(
-        <div className={styles.navbar}>
+        <div className={isOpenNavbar ? styles.navbarOpen : styles.navbar}>
             <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=> {deleteCategory(categoryToDelete); setOpen(false)}}/>
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>

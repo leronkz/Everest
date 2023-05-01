@@ -226,7 +226,7 @@ function Account({photo}){
                     Nie udało się usunąć zdjęcia
                 </Alert>
             </Snackbar>
-            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')}/></header>
+            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')} showMenu={false}/></header>
             <main className={styles.main}>
                 <form className={styles.account_form} encType='multipart/form-data' onSubmit={handleSubmit}>
                     <div className={styles.profile_picture}>

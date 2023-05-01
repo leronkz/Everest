@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import UpdateTask from './UpdateTask';
 import styles from '../modules/header.module.css';
 import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -12,13 +13,14 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
-import { Divider } from '@mui/material';
+import {Divider, ListItem, ListItemText, List, ListItemButton} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import {Link} from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from "@mui/material/TextField";
+import axios from "axios";
 function getDate(){
     let date = new Date();
     return date;
@@ -75,12 +77,31 @@ const Search = styled('div')(({ theme }) => ({
   }));
   
 
-function Header({logoutAction,name}){
+function Header({logoutAction,name, openNavbar, showMenu}){
+
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [searchInput, setSearchInput] = React.useState('');
-    const tasks = [
-        {title:'Test'},
-    ];
+    const [tasks,setTasks] = React.useState([]);
+    const [selectedTask, setSelectedTask] = React.useState(null);
+    const [openUpdateTask, setOpenUpdateTask] = React.useState(false);
+    useEffect(()=>{
+        if(localStorage.getItem('token') !== '' && localStorage.getItem('token')!=null ){
+            getTasks();
+        }
+    },[]);
+
+    const getTasks = () =>{
+        axios.get(`http://127.0.0.1:8000/api/get_tasks/all`,{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response)=>{
+            setTasks([]);
+            setTasks(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        });
+    }
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
          setAnchorEl(event.currentTarget);
@@ -93,15 +114,17 @@ function Header({logoutAction,name}){
         logoutAction();
     }
 
-    const changeSearchInput = (e) => {
-        setSearchInput(e.target.value);
+    const handleAutocompleteChange = (event, value) => {
+        setSelectedTask(value);
     }
+
     return (
         <div className={styles.top_bar}>
             <div className={styles.left_control}>
-               <div className={styles.open_nav}>
+               <div className={showMenu ? styles.open_nav : styles.open_nav_hidden}>
                     <IconButton
                         size='large'
+                        onClick = {openNavbar}
                     >
                         <MenuIcon/>
                     </IconButton>
@@ -119,34 +142,25 @@ function Header({logoutAction,name}){
                 <p id={styles.date_header}>Dziś jest: {todaysDate} </p>
             </div> 
             <div className={styles.center_control}>
-                <Search theme={theme}>
-                    <SearchIconWrapper>
-                        <SearchIcon/>
-                    </SearchIconWrapper>
-                    {/*<Autocomplete*/}
-                    {/*    freeSolo*/}
-                    {/*    id="free-solo"*/}
-                    {/*    disableClearable*/}
-                    {/*    options={tasks.map((task)=> task.title)}*/}
-                    {/*    sx={{width:"100%"}}*/}
-                    {/*    renderInput={(params) => (*/}
-                    {/*        <TextField*/}
-                    {/*            {...params}*/}
-                    {/*            label="Search input"*/}
-                    {/*            InputProps={{*/}
-                    {/*                ...params.InputProps,*/}
-                    {/*                type: 'search',*/}
-                    {/*            }}*/}
-                    {/*        />*/}
-                    {/*    )}*/}
-                    {/*    >*/}
-                        <StyledInputBase
-                            placeholder="Wyszukaj zadania..."
-                            inputProps={{'aria-label': 'search'}}
-                            onChange = {changeSearchInput}
+                <Autocomplete
+                    freeSolo
+                    id={styles.autocompleteSearch}
+                    disableClearable
+                    options={tasks.map((option) => option.title)}
+                    onChange = {handleAutocompleteChange}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label="Wyszukaj zadanie..."
+                            variant="outlined"
+                            sx={{background:"#FFD9C3", borderRadius:"30px"}}
+                            InputProps={{
+                                ...params.InputProps,
+                                type: 'search',
+                            }}
                         />
-                    {/*</Autocomplete>*/}
-                </Search>
+                    )}
+                />
             </div>
             <div className={styles.right_control}>
                 <Tooltip title="Twoje konto">

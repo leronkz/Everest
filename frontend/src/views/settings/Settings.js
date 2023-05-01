@@ -139,7 +139,7 @@ function Settings(){
                     Nie udało się usunąć konta
                 </Alert>
             </Snackbar>
-            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')}/></header>
+            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')} showMenu={false}/></header>
             <main className={styles.main}>
             <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=> {deleteAccount(); setOpen(false)}}/>
                 <form className={styles.change_form} onSubmit={handleSubmit}>

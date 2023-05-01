@@ -49,6 +49,16 @@
         top:0;
         transform: translateX(-230px);
         transition: transform 0.2s;
+        height:100%;
+    }
+    .navbarOpen{
+        z-index: 1;
+        position: fixed;
+        left:0;
+        top:0;
+        transform: translateX(0px);
+        transition: transform 0.2s;
+        height:100%;
     }
     .text{
         font-size: 20px;

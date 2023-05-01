@@ -103,8 +103,8 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         }).catch((error)=>{
             console.log(error);
         })
-
     };
+
 
     return(
         <Box sx={{
