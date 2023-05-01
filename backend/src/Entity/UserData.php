@@ -34,13 +34,15 @@ use Doctrine\ORM\Mapping as ORM;
             'summary' => 'Retrieves user profile picture',
             'description' => 'Retrieves user profile picture',
             'parameters' => [
+                [
                 'name' => 'id',
                 'in' => 'path',
                 'required' => true,
                 'type' => 'int',
                 'description' => 'User ID'
+                ],
             ],
-        ],
+        ]
     ),
     new Get(
         name: 'delete_account',
