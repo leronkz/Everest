@@ -5,12 +5,14 @@ import styles from '../../public/modules/main.module.css';
 import React, {useEffect} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import OperationSnackbar from "../../public/components/OperationSnackbar";
 function Main(){
 
     const navigate = useNavigate();
     const [userData,setUserData] = React.useState({});
     const [isOpenNavbar, setIsOpenNavbar] = React.useState(false);
-
+    const [openSuccessESnackbar,setOpenSuccessESnackbar] = React.useState(false);
+    const [openErrorESnackbar, setOpenErrorESnackbar] = React.useState(false);
     useEffect(()=>{
         if(localStorage.getItem('token') === "" || localStorage.getItem('token') == null){
             navigate('/');
@@ -29,6 +31,7 @@ function Main(){
                 localStorage.setItem('username',response.data.name);
         })
     }
+
     const handleLogout = () => {
         localStorage.setItem('token',"");
         localStorage.setItem('username',"");
@@ -40,10 +43,18 @@ function Main(){
         setCategory(category);
         setIsOpenNavbar(false);
     }
+    const handleClose = (event, reason) => {
+        if(reason === 'clickaway'){
+            return;
+        }
+        setOpenErrorESnackbar(false);
+        setOpenSuccessESnackbar(false);
+    }
     const handleOpen = () => setAddCategory(true);
     return(
          <div className={styles.container}>
-           <header style={{verticalAlign:"top"}}><Header logoutAction={handleLogout} name={userData.name} openNavbar={()=> setIsOpenNavbar(!isOpenNavbar)} showMenu={true}/></header>
+             <OperationSnackbar openSuccessSnackbar = {openSuccessESnackbar} openErrorSnackbar={openErrorESnackbar} handleClose={handleClose} successMessage={"Zadanie zostało pomyślnie edytowane"} errorMessage={"Nie udało się edytowac zadania"}/>
+           <header style={{verticalAlign:"top"}}><Header logoutAction={handleLogout} name={userData.name} openNavbar={()=> setIsOpenNavbar(!isOpenNavbar)} showMenu={true} handleOpenErrorSnackbar={() => setOpenErrorESnackbar(true)} handleOpenSuccessSnackbar={() => setOpenSuccessESnackbar(true)}/></header>
            <div className={styles.main}>    
                 <Navbar handleClick = {handleClick} handleOpen={handleOpen} isOpenNavbar={isOpenNavbar}/>
                 <main>

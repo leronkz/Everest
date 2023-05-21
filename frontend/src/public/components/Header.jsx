@@ -13,13 +13,12 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
-import {Divider, ListItem, ListItemText, List, ListItemButton} from '@mui/material';
+import {Divider} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import {Link} from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField from "@mui/material/TextField";
 import axios from "axios";
 function getDate(){
     let date = new Date();
@@ -30,7 +29,7 @@ const todaysDate = getDate().toISOString().slice(0,10);
 
 const theme = createTheme({
    shape:{
-        borderRadius: '30px',
+        borderRadius: "0px",
    },
 })
 
@@ -77,15 +76,17 @@ const Search = styled('div')(({ theme }) => ({
   }));
   
 
-function Header({logoutAction,name, openNavbar, showMenu}){
+function Header({logoutAction,name, openNavbar, showMenu, handleOpenSuccessSnackbar, handleOpenErrorSnackbar}){
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [tasks,setTasks] = React.useState([]);
     const [selectedTask, setSelectedTask] = React.useState(null);
     const [openUpdateTask, setOpenUpdateTask] = React.useState(false);
+    const [categories, setCategories] = React.useState([]);
     useEffect(()=>{
         if(localStorage.getItem('token') !== '' && localStorage.getItem('token')!=null ){
             getTasks();
+            getCategories();
         }
     },[]);
 
@@ -101,7 +102,18 @@ function Header({logoutAction,name, openNavbar, showMenu}){
             console.log(error);
         });
     }
+    const getCategories = () => {
 
+        axios.get('http://127.0.0.1:8000/api/get_categories/',{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        }).then((response)=>{
+            setCategories(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        })
+    };
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
          setAnchorEl(event.currentTarget);
@@ -115,7 +127,9 @@ function Header({logoutAction,name, openNavbar, showMenu}){
     }
 
     const handleAutocompleteChange = (event, value) => {
-        setSelectedTask(value);
+        const task = tasks.find((t) => t.title === value);
+        setSelectedTask(task);
+        setOpenUpdateTask(true);
     }
 
     return (
@@ -139,28 +153,22 @@ function Header({logoutAction,name, openNavbar, showMenu}){
                       <HomeIcon />
                     </IconButton>
                   </Link>
-                <p id={styles.date_header}>Dziś jest: {todaysDate} </p>
+                <p id={styles.date_header}>Dziś jest: {todaysDate}</p>
             </div> 
             <div className={styles.center_control}>
                 <Autocomplete
                     freeSolo
-                    id={styles.autocompleteSearch}
-                    disableClearable
                     options={tasks.map((option) => option.title)}
                     onChange = {handleAutocompleteChange}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Wyszukaj zadanie..."
-                            variant="outlined"
-                            sx={{background:"#FFD9C3", borderRadius:"30px"}}
-                            InputProps={{
-                                ...params.InputProps,
-                                type: 'search',
-                            }}
-                        />
-                    )}
+                    style={{width: "100%"}}
+                    getOptionSelected={(option, value) => option === value}
+                    renderInput={(params) => {
+                        const {InputLabelProps, InputProps, ...rest} = params;
+                        return (<InputBase {...params.InputProps} sx={{ml: 1, flex: 1, background:"white", pl:2, borderRadius:"30px"}}  placeholder="Wyszukaj zadanie..."  {...rest}/>
+                        )
+                    }}
                 />
+                {selectedTask && <UpdateTask id={selectedTask.idTask} title={selectedTask.title} description={selectedTask.description} deadline={selectedTask.deadline.substring(0,10)} priority={selectedTask.priority} category={selectedTask.categoryName} visible={openUpdateTask} onClose={()=> setOpenUpdateTask(false)} categories={categories} handleOpenSuccessSnackbar={handleOpenSuccessSnackbar} handleOpenErrorSnackbar={handleOpenErrorSnackbar} />}
             </div>
             <div className={styles.right_control}>
                 <Tooltip title="Twoje konto">

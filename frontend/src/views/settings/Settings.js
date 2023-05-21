@@ -3,11 +3,10 @@ import styles from '../../public/modules/settings.module.css';
 import Header from '../../public/components/Header';
 import Confirmation from '../../public/components/Confirmation';
 import axios from 'axios';
-import CircularProgress from '@mui/material/CircularProgress';
-import {Box} from "@mui/system";
 import {useNavigate} from "react-router-dom";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from '@mui/material/Snackbar';
+import OperationSnackbar from "../../public/components/OperationSnackbar";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
@@ -32,6 +31,8 @@ function Settings(){
     const [success, setSuccess] = React.useState([]);
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
+    const [openSuccessESnackbar,setOpenSuccessESnackbar] = React.useState(false);
+    const [openErrorESnackbar, setOpenErrorESnackbar] = React.useState(false);
 
     useEffect(()=>{
         if(localStorage.getItem('token') === '' || localStorage.getItem('token') == null)
@@ -60,6 +61,8 @@ function Settings(){
         }
         setOpenSuccessSnackbar(false);
         setOpenErrorSnackbar(false);
+        setOpenSuccessESnackbar(false);
+        setOpenErrorESnackbar(false);
     }
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -88,10 +91,8 @@ function Settings(){
                         if (response.data !== undefined) {
                             setSuccess(response.data);
                         }
-                        console.log(response);
                     }).catch(error => {
                         setIsSubmitting(false);
-                        console.log(error);
                         if (error.response.data !== undefined) {
                             setErrors(error.response.data);
                             setErrors([{message: "Podałeś niepoprawne obecne hasło"}])
@@ -126,9 +127,9 @@ function Settings(){
             handleErrorSnackbarClick();
         })
     };
-
     return(
         <div className={styles.container}>
+            <OperationSnackbar openSuccessSnackbar = {openSuccessESnackbar} openErrorSnackbar={openErrorESnackbar} handleClose={handleClose} successMessage={"Zadanie zostało pomyślnie edytowane"} errorMessage={"Nie udało się edytowac zadania"}/>
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={()=>{handleClose(); localStorage.setItem('token',"")}}>
                 <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
                     Pomyślnie usunięto konto, zaraz nastąpi wylogowanie
@@ -139,7 +140,7 @@ function Settings(){
                     Nie udało się usunąć konta
                 </Alert>
             </Snackbar>
-            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')} showMenu={false}/></header>
+            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')} showMenu={false} handleOpenErrorSnackbar={() => setOpenErrorESnackbar(true)} handleOpenSuccessSnackbar={() => setOpenSuccessESnackbar(true)}/></header>
             <main className={styles.main}>
             <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=> {deleteAccount(); setOpen(false)}}/>
                 <form className={styles.change_form} onSubmit={handleSubmit}>
