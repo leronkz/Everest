@@ -10,6 +10,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Confirmation from "../../public/components/Confirmation";
+import OperationSnackbar from "../../public/components/OperationSnackbar";
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
@@ -30,6 +31,8 @@ function Account({photo}){
     const [openDeleteSuccessSnackbar,setOpenDeleteSuccessSnackbar] = React.useState(false);
     const [openDeleteErrorSnackbar,setOpenDeleteErrorSnackbar] = React.useState(false);
     const [openConfirmation, setOpenConfirmation] = React.useState(false);
+    const [openSuccessESnackbar,setOpenSuccessESnackbar] = React.useState(false);
+    const [openErrorESnackbar, setOpenErrorESnackbar] = React.useState(false);
     const handleNameChange = (e) =>{
         setName(e.target.value);
     }
@@ -80,6 +83,8 @@ function Account({photo}){
         setOpenDeleteSuccessSnackbar(false);
         setOpenDeleteErrorSnackbar(false);
         setOpenLoadImageErrorSnackbar(false);
+        setOpenErrorESnackbar(false);
+        setOpenSuccessESnackbar(false);
     }
 
     useEffect(()=>{
@@ -185,6 +190,7 @@ function Account({photo}){
 
     return(
         <div className={styles.container}>
+            <OperationSnackbar openSuccessSnackbar = {openSuccessESnackbar} openErrorSnackbar={openErrorESnackbar} handleClose={handleClose} successMessage={"Zadanie zostało pomyślnie edytowane"} errorMessage={"Nie udało się edytowac zadania"}/>
             <Confirmation open={openConfirmation} onClose={()=> setOpenConfirmation(false)} handleDelete={()=> {deleteImage(); setOpenConfirmation(false)}}/>
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={openSuccessSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{width:"100%"}}>
@@ -226,7 +232,7 @@ function Account({photo}){
                     Nie udało się usunąć zdjęcia
                 </Alert>
             </Snackbar>
-            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')} showMenu={false}/></header>
+            <header><Header logoutAction={handleLogout} name={localStorage.getItem('username')} showMenu={false} handleOpenErrorSnackbar={() => setOpenErrorESnackbar(true)} handleOpenSuccessSnackbar={() => setOpenSuccessESnackbar(true)}/></header>
             <main className={styles.main}>
                 <form className={styles.account_form} encType='multipart/form-data' onSubmit={handleSubmit}>
                     <div className={styles.profile_picture}>

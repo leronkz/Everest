@@ -82,7 +82,7 @@ function Register(){
             <div className={styles.container}>
                 <div className={styles.loginPanel}>
                     <img id={styles.logo} src={mainLogo} alt="Logo"/>
-                    <p className={styles.mainText}>Założ konto już teraz</p>
+                    <p className={styles.mainText}>Załóż konto już teraz</p>
                     <form className={styles.loginForm} onSubmit={handleSubmit}>
                         {Object.keys(validationErrors).length !==0 &&
                             <p className={styles.errorText}>{validationErrors[0].message}</p>

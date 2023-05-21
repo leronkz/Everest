@@ -10,9 +10,11 @@ import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import OperationSnackbar from "./OperationSnackbar";
 function Section({category, isOpenCategory, handleCloseCategory}){
+
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
     const [spinner, setSpinner] = React.useState(false);
+    const [tasks,setTasks] = React.useState([]);
     const [categories, setCategories] = React.useState([]);
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
@@ -20,6 +22,9 @@ function Section({category, isOpenCategory, handleCloseCategory}){
     const [openErrorESnackbar, setOpenErrorESnackbar] = React.useState(false);
     const [openSuccessCSnackbar,setOpenSuccessCSnackbar] = React.useState(false);
     const [openErrorCSnackbar, setOpenErrorCSnackbar] = React.useState(false);
+    const [openErrorCategorySnackbar, setOpenErrorCategorySnackbar] = React.useState(false);
+    const [openErrorTaskSnackbar, setOpenErrorTaskSnackbar] = React.useState(false);
+
     const handleOpenSuccessSnackbar = () =>{
         setOpenSuccessSnackbar(true);
     }
@@ -38,6 +43,12 @@ function Section({category, isOpenCategory, handleCloseCategory}){
     const handleOpenCErrorSnackbar = () =>{
         setOpenErrorCSnackbar(true);
     }
+    const handleOpenErrorCategorySnackbar = () => {
+        setOpenErrorCategorySnackbar(true);
+    }
+    const handleOpenErrorTaskSnackbar = () => {
+        setOpenErrorTaskSnackbar(true);
+    }
     const handleClose = (event, reason) => {
         if(reason === 'clickaway'){
             return;
@@ -48,6 +59,8 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         setOpenSuccessESnackbar(false);
         setOpenErrorCSnackbar(false);
         setOpenSuccessCSnackbar(false);
+        setOpenErrorCategorySnackbar(false);
+        setOpenErrorTaskSnackbar(false);
     }
     const handleClick = () => {
         setVisible(true);
@@ -55,8 +68,6 @@ function Section({category, isOpenCategory, handleCloseCategory}){
 
     if(category === '')
         category = "Wszystkie zadania";
-
-    const [tasks,setTasks] = React.useState([]);
 
     useEffect(() =>{
         if(localStorage.getItem('token')==='' || localStorage.getItem('token')==null){
@@ -88,7 +99,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             setTasks(response.data);
         }).catch((error)=>{
             setSpinner(false);
-            console.log(error);
+            handleOpenErrorTaskSnackbar();
         });
     }
 
@@ -101,7 +112,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         }).then((response)=>{
             setCategories(response.data);
         }).catch((error)=>{
-            console.log(error);
+            handleOpenErrorCategorySnackbar();
         })
     };
 
@@ -116,6 +127,8 @@ function Section({category, isOpenCategory, handleCloseCategory}){
             <OperationSnackbar openSuccessSnackbar = {openSuccessSnackbar} openErrorSnackbar={openErrorSnackbar} handleClose={handleClose} successMessage={"Zadanie zostało pomyślnie dodane"} errorMessage={"Nie udało się dodać zadania"}/>
             <OperationSnackbar openSuccessSnackbar = {openSuccessESnackbar} openErrorSnackbar={openErrorESnackbar} handleClose={handleClose} successMessage={"Zadanie zostało pomyślnie edytowane"} errorMessage={"Nie udało się edytowac zadania"}/>
             <OperationSnackbar openSuccessSnackbar = {openSuccessCSnackbar} openErrorSnackbar={openErrorCSnackbar} handleClose={handleClose} successMessage={"Udało się dodać nową kategorie"} errorMessage={"Nie udało się dodać nowej kategorii"}/>
+            <OperationSnackbar openSuccessSnackbar = {false} openErrorSnackbar={openErrorCategorySnackbar} handleClose={handleClose} successMessage={""} errorMessage={"Nie udało się pobrać kategorii"}/>
+            <OperationSnackbar openSuccessSnackbar = {false} openErrorSnackbar={openErrorTaskSnackbar} handleClose={handleClose} successMessage={""} errorMessage={"Nie udało się pobrać zadań"}/>
             <Box sx={{
                 display:"flex",
                 alignItems:"center",

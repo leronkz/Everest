@@ -14,7 +14,8 @@ import UpdateTask from './UpdateTask';
 import DoneSound from '../sound/done.mp3';
 import Button from "@mui/material/Button";
 import CloseIcon from '@mui/icons-material/Close';
-
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
@@ -102,7 +103,7 @@ function Task(props){
         </React.Fragment>
     );
 
-    const handleChecked = () => {
+    const handleChecked = (n) => {
         if(checked === false) {
             setTimeout(()=>{
                 const audio = new Audio(DoneSound);
@@ -129,7 +130,7 @@ function Task(props){
                 <Confirmation open={open} onClose={()=> setOpen(false)} handleDelete={()=>{deleteAction(); setOpen(false);}}/>
                     <Box className={styles.task_header}>
                     <Box sx={{display:"flex", flexDirection:"row", justifyContent:"flex-start", alignItems:"center"}}>
-                        <Checkbox checked={checked} onChange={handleChange} onClick={handleChecked} inputProps={{'aria-label':'controlled'} }/>
+                        <Checkbox icon={<CircleOutlinedIcon/>} checkedIcon={<CheckCircleIcon/>} color="success" checked={checked} onChange={handleChange} onClick={handleChecked} inputProps={{'aria-label':'controlled'} }/>
                         <p className={styles.task_text}>{title}</p>
                     </Box>
                     <CircleIcon sx={{color: priority_color, border:"2px solid", borderColor: priority_color, borderRadius:"50%"}}/>
