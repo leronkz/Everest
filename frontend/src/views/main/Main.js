@@ -54,7 +54,7 @@ function Main(){
     return(
          <div className={styles.container}>
              <OperationSnackbar openSuccessSnackbar = {openSuccessESnackbar} openErrorSnackbar={openErrorESnackbar} handleClose={handleClose} successMessage={"Zadanie zostało pomyślnie edytowane"} errorMessage={"Nie udało się edytowac zadania"}/>
-           <header style={{verticalAlign:"top"}}><Header logoutAction={handleLogout} name={userData.name} openNavbar={()=> setIsOpenNavbar(!isOpenNavbar)} showMenu={true} handleOpenErrorSnackbar={() => setOpenErrorESnackbar(true)} handleOpenSuccessSnackbar={() => setOpenSuccessESnackbar(true)}/></header>
+           <header style={{verticalAlign:"top", position:"fixed", width:"100%",zIndex:"2"}}><Header logoutAction={handleLogout} name={userData.name} openNavbar={()=> setIsOpenNavbar(!isOpenNavbar)} showMenu={true} handleOpenErrorSnackbar={() => setOpenErrorESnackbar(true)} handleOpenSuccessSnackbar={() => setOpenSuccessESnackbar(true)}/></header>
            <div className={styles.main}>    
                 <Navbar handleClick = {handleClick} handleOpen={handleOpen} isOpenNavbar={isOpenNavbar}/>
                 <main>

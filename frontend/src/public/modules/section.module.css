@@ -21,7 +21,7 @@
     min-height: 0;
 }
 .task{
-    background: #FFF5FF;
+    background: #FBF8FF;
     border-radius: 30px;
     width: 60%;
     margin-bottom:1em;
@@ -43,6 +43,20 @@
         font-size: 20px;
     }
     .task{
+        width: 80%;
+    }
+}
+@media only screen and (max-device-width: 600px){
+
+    .task{
+        width: 90%;
+    }
+
+}
+@media only screen and (max-device-width: 500px){
+
+    .task{
         width: 100%;
     }
+
 }

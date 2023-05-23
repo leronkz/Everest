@@ -5,7 +5,6 @@
 .main{
    width:100%; 
    display:flex;
-   /*flex-direction: column;*/
    align-items: center;
    margin-top: 5ch;
 }
@@ -26,10 +25,6 @@
     background-size: cover;
 }
 .account_form{
-    /*width:30%;*/
-    /*!*display:flex;*!*/
-    /*!*flex-direction: column;*!*/
-    /*!*align-items: center;*!*/
     display:grid;
     grid-template-columns: 1fr 1fr;
     width:100%;
@@ -56,17 +51,14 @@
 #change_button{
     width:50%;
     height: 2em;
-    background: #FAF7FF;
     border: 2px solid #1BF808;
     border-radius: 30px;
     margin:0.5em 0;
-
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
     line-height: 28px;
-
     color: #2CA800;
 }
 #change_button:hover{
@@ -74,10 +66,8 @@
     color: white;
 }
 .account_data{
-    background: #FFF5FF;
     border: 1px solid #000000;
     border-radius: 30px;
-    /*width:100%;*/
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -88,6 +78,7 @@
 
     .main{
         flex-direction: column;
+        margin-top: 1ch;
     }
 
     .account_form{
@@ -97,16 +88,26 @@
         align-items: center;
     }
     .picture{
-        width:150px;
-        height: 150px;
+        width: 200px;
+        height: 200px;
     }
     .profile_picture{
         margin-bottom:3ch;
     }
     .account_data{
-        width:70%;
+        width: 40%;
     }
     #change_button{
         width:60%;
+    }
+}
+@media only screen and (max-device-width: 500px){
+    .account_data{
+        width: 60%;
+    }
+}
+@media only screen and (max-device-width: 300px){
+    .account_data{
+        width: 80%;
     }
 }

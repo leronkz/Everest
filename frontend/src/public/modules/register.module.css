@@ -143,55 +143,53 @@ input{
 #loginButtonMobile{
     visibility: hidden;
 }
-@media only screen and (max-device-width: 800px){
+@media only screen and (max-device-width: 900px){
+    .mainText{
+        font-size: 30px;
+        line-height: 40px;
+    }
+    .firstText{
+        font-size: 24px;
+    }
+    .secondText{
+        font-size: 16px;
+    }
+    #registerButton{
+        font-size: 20px;
+    }
+    #loginButton{
+        font-size: 20px;
+    }
+}
 
+@media only screen and (max-device-width: 800px){
     .container{
         display:flex;
         flex-direction:column;
         width: 100%;
         height: 100%;
     }
-
+    .loginForm{
+        align-items: center;
+    }
     .registerPanel{
         display:none;
     }
-
     .mainText{
         font-family: 'Poppins';
         font-style: normal;
         font-weight: 500;
-        font-size: 20px;
+        font-size: 28px;
         color: #000000;
-    }
-    .firstText{
-        font-family: 'Poppins';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 16px;
-        color: #FFFFFF;
-    }
-    .secondText{
-        font-family: 'Poppins';
-        font-style: normal;
-        font-weight: 600;
-        font-size: 16px;
-        color: #FFFFFF;
     }
     #registerButton{
-        border: 3px solid #32CE2F;
-        border-radius: 30px;
-        width: 100%;
-        font-family: 'Poppins';
-        font-style: normal;
-        font-weight: 400;
+        width: 50%;
         font-size: 16px;
         align-self:center;
-        color: #000000;
-        margin-top: 2em;
-        cursor: pointer;
     }
     input{
         font-size: 13px;
+        width: 70%;
     }
     #loginButtonMobile{
         visibility: visible;
@@ -204,13 +202,57 @@ input{
         font-size: 16px;
         color: #FFFFFF;
         margin-top: 2em;
-        width: 80%;
+        width: 35%;
         cursor: pointer;
     }
-    .successText .errorText {
+    #loginButtonMobile:hover{
+        background:#ffffff;
+        color:#000000;
+    }
+    .errorText{
         font-size: 13px;
     }
     #logo{
         width: 90%;
+    }
+}
+@media only screen and (max-device-width: 600px) {
+    #loginButtonMobile{
+        font-size: 14px;
+    }
+}
+@media only screen and (max-device-width: 500px) {
+    #loginButtonMobile{
+        font-size: 13px;
+        width: 40%;
+    }
+    #registerButton{
+        width: 60%;
+    }
+}
+@media only screen and (max-device-width: 400px) {
+    input{
+        width: 90%;
+    }
+    #loginButtonMobile{
+        font-size: 13px;
+        width: 55%;
+    }
+    #registerButton{
+        width: 70%;
+    }
+}
+@media only screen and (max-device-width: 300px) {
+    .mainText{
+        font-size: 20px;
+    }
+    input{
+        width: 100%;
+    }
+    #loginButtonMobile{
+        width: 60%;
+    }
+    #registerButton{
+        width: 70%;
     }
 }

@@ -121,6 +121,7 @@ function Section({category, isOpenCategory, handleCloseCategory}){
         <Box sx={{
             display:"flex",
             flexDirection:"column",
+            mt: "6ch"
         }}>
             <AddTask visible={visible} onClose={()=> setVisible(false)} categories = {categories} handleOpenSuccessSnackbar={handleOpenSuccessSnackbar} handleOpenErrorSnackbar={handleOpenErrorSnackbar}/>
             <Category open={isOpenCategory} onClose = {handleCloseCategory} handleOpenSuccessSnackbar={handleOpenCSuccessSnackbar} handleOpenErrorSnackbar={handleOpenCErrorSnackbar}/>
