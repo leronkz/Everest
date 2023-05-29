@@ -12,7 +12,7 @@ import Select from "@mui/material/Select";
 
 function UpdateTask(props){
 
-    let {id, title, description, deadline, priority, category, visible, onClose, categories, handleOpenSuccessSnackbar, handleOpenErrorSnackbar} = props;
+    let {id, title, description, deadline, priority, category, visible, onClose, categories, handleOpenSuccessSnackbar, handleOpenErrorSnackbar, getTasks} = props;
 
     const [task_title,setTitle] = React.useState(title);
     const [task_description, setDescription] = React.useState(description);
@@ -51,6 +51,7 @@ function UpdateTask(props){
             }
         }).then((response)=>{
             handleOpenSuccessSnackbar();
+            getTasks();
             onClose();
         }).catch((error)=>{
             handleOpenErrorSnackbar();

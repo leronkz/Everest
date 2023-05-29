@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import axios from 'axios';
 function Category(props){
-    const {open, onClose, handleOpenSuccessSnackbar, handleOpenErrorSnackbar} = props;
+    const {open, onClose, handleOpenSuccessSnackbar, handleOpenErrorSnackbar, getCategories} = props;
     const [name,setName] = React.useState('');
     if(!open)
         return null;
@@ -27,10 +27,11 @@ function Category(props){
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then(response=>{
-                handleOpenSuccessSnackbar();
-                onClose();
+            handleOpenSuccessSnackbar();
+            getCategories();
+            onClose();
         }).catch(error=>{
-                handleOpenErrorSnackbar();
+            handleOpenErrorSnackbar();
         });
     }
 

@@ -14,12 +14,12 @@ let Icon = () => <KeyboardArrowUpOutlinedIcon/>
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
-function Navbar({handleClick, handleOpen, isOpenNavbar}){
+function Navbar({handleClick, handleOpen, isOpenNavbar, categories, getCategories}){
+
     const navigate = useNavigate();
     const [openSuccessSnackbar,setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar,setOpenErrorSnackbar] = React.useState(false);
     const [visible, setVisible] = React.useState(true);
-    const [categories,setCategories] = React.useState([]);
     const [open, setOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = React.useState('');
 
@@ -38,23 +38,10 @@ function Navbar({handleClick, handleOpen, isOpenNavbar}){
        {
            navigate('/')
        }else{
-           getCategories();
        }
     },[])
 
-    const getCategories = () => {
 
-        axios.get('http://127.0.0.1:8000/api/get_categories/',{
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-        }).then((response)=>{
-            setCategories(response.data);
-        }).catch((error)=>{
-            console.log(error);
-        })
-
-    };
     const handleSuccessSnackbarClick = () => {
         setOpenSuccessSnackbar(true);
     }
@@ -79,6 +66,7 @@ function Navbar({handleClick, handleOpen, isOpenNavbar}){
             }
         }).then(response=>{
                 handleSuccessSnackbarClick();
+                getCategories();
         }).catch(error=>{
                 handleErrorSnackbarClick();
         })

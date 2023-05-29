@@ -20,7 +20,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props}/>
 });
 function Task(props){
-    const {id, title, description, priority, date, categories, category, handleOpenSuccessSnackbar, handleOpenErrorSnackbar} = props;
+    const {id, title, description, priority, date, categories, category, handleOpenSuccessSnackbar, handleOpenErrorSnackbar, getTasks} = props;
     const [checked, setChecked] = React.useState(false);
     const [isChecked,setIsChecked] = React.useState(false);
     const [visible, setVisible] = React.useState(false);
@@ -78,6 +78,7 @@ function Task(props){
             }
         }).then(response=>{
             handleSuccessSnackbarClick();
+            getTasks();
         }).catch(error=>{
             handleErrorSnackbarClick();
         });
@@ -163,7 +164,7 @@ function Task(props){
                         <CircleIcon sx={{ml:"1em",color: priority_color, border:'2px solid',borderRadius:"50%", borderColor: priority_color}}/>
                     </Box>
                 </Box>
-                <UpdateTask id={id} title={title} description={description} deadline={date} priority={priority} category={category} visible={openUpdateTask} onClose={()=> setOpenUpdateTask(false)} categories={categories} handleOpenSuccessSnackbar={handleOpenSuccessSnackbar} handleOpenErrorSnackbar={handleOpenErrorSnackbar}/>
+                <UpdateTask id={id} title={title} description={description} deadline={date} priority={priority} category={category} visible={openUpdateTask} onClose={()=> setOpenUpdateTask(false)} categories={categories} handleOpenSuccessSnackbar={handleOpenSuccessSnackbar} handleOpenErrorSnackbar={handleOpenErrorSnackbar} getTasks={getTasks}/>
             </Box>
         </Box>
     );

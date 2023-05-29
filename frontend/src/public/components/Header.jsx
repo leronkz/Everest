@@ -76,7 +76,7 @@ const Search = styled('div')(({ theme }) => ({
   }));
   
 
-function Header({logoutAction,name, openNavbar, showMenu, handleOpenSuccessSnackbar, handleOpenErrorSnackbar}){
+function Header({logoutAction, name, openNavbar, showMenu, handleOpenSuccessSnackbar, handleOpenErrorSnackbar}){
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [tasks,setTasks] = React.useState([]);
@@ -99,7 +99,6 @@ function Header({logoutAction,name, openNavbar, showMenu, handleOpenSuccessSnack
             setTasks([]);
             setTasks(response.data);
         }).catch((error)=>{
-            console.log(error);
         });
     }
     const getCategories = () => {
@@ -111,7 +110,6 @@ function Header({logoutAction,name, openNavbar, showMenu, handleOpenSuccessSnack
         }).then((response)=>{
             setCategories(response.data);
         }).catch((error)=>{
-            console.log(error);
         })
     };
     const open = Boolean(anchorEl);
@@ -168,7 +166,7 @@ function Header({logoutAction,name, openNavbar, showMenu, handleOpenSuccessSnack
                         )
                     }}
                 />
-                {selectedTask && <UpdateTask id={selectedTask.idTask} title={selectedTask.title} description={selectedTask.description} deadline={selectedTask.deadline.substring(0,10)} priority={selectedTask.priority} category={selectedTask.categoryName} visible={openUpdateTask} onClose={()=> setOpenUpdateTask(false)} categories={categories} handleOpenSuccessSnackbar={handleOpenSuccessSnackbar} handleOpenErrorSnackbar={handleOpenErrorSnackbar} />}
+                {selectedTask && <UpdateTask id={selectedTask.idTask} title={selectedTask.title} description={selectedTask.description} deadline={selectedTask.deadline.substring(0,10)} priority={selectedTask.priority} category={selectedTask.categoryName} visible={openUpdateTask} onClose={()=> setOpenUpdateTask(false)} categories={categories} handleOpenSuccessSnackbar={handleOpenSuccessSnackbar} handleOpenErrorSnackbar={handleOpenErrorSnackbar} getTasks={getTasks}/>}
             </div>
             <div className={styles.right_control}>
                 <Tooltip title="Twoje konto">
@@ -184,7 +182,7 @@ function Header({logoutAction,name, openNavbar, showMenu, handleOpenSuccessSnack
                         </IconButton>
                 </Tooltip>
 
-                <p id={styles.date_header}>Cześć {name}</p>
+                {/*<p id={styles.date_header}>Cześć {name}</p>*/}
                 <Menu
                     anchorEl={anchorEl}
                     id="user-menu"
