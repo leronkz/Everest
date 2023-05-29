@@ -8,15 +8,16 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Select from '@mui/material/Select';
 import axios from "axios";
-
+import CircularProgress from '@mui/material/CircularProgress';
 function AddTask(props){
 
-    const {visible, onClose, categories, handleOpenSuccessSnackbar, handleOpenErrorSnackbar} = props;
+    const {visible, onClose, categories, handleOpenSuccessSnackbar, handleOpenErrorSnackbar, getTasks} = props;
     const [title,setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [deadline, setDeadline] = React.useState('');
     const [priority,setPriority] = React.useState('low');
     const [category,setCategory] = React.useState('');
+    const [spinner, setSpinner] = React.useState(false);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -36,6 +37,7 @@ function AddTask(props){
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setSpinner(true);
         const data = {
           title: title,
           description: description,
@@ -49,9 +51,12 @@ function AddTask(props){
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             }
         }).then((response)=>{
+            setSpinner(false);
             handleOpenSuccessSnackbar();
+            getTasks();
             onClose();
         }).catch((error)=>{
+            setSpinner(false);
             handleOpenErrorSnackbar();
         });
     }
