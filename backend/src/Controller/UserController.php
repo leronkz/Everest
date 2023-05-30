@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Message\DeleteConfirmation;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Service\FileUploader;
@@ -60,9 +62,10 @@ class UserController extends AbstractController
     }
     #[Route('/api/delete_account', name: 'delete_account', methods: 'GET')]
     #[Security("is_granted('ROLE_USER')")]
-    public function deleteUser(ManagerRegistry $doctrine): JsonResponse{
+    public function deleteUser(ManagerRegistry $doctrine, MessageBusInterface $bus): JsonResponse{
         $user = $this->getUser();
         $doctrine->getRepository(User::class)->removeUser($user);
+        $bus->dispatch(new DeleteConfirmation($user));
         return $this->json(['message'=>'Account deleted successfully'],200,['Content-type: application/json']);
     }
     #[Route('/api/save_user', name:'save_user_data', methods: 'POST')]

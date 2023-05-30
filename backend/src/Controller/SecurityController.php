@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\UserData;
+use App\Message\RegisterConfirmation;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -23,7 +25,7 @@ use App\Entity\User;
 class SecurityController extends AbstractController
 {
     #[Route('/register', name: 'register', methods: 'POST')]
-    public function registerUser(ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function registerUser(ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $passwordHasher, MessageBusInterface $bus): JsonResponse
     {
         $decoded = json_decode($request->getContent());
         $email = $decoded->email;
@@ -44,7 +46,7 @@ class SecurityController extends AbstractController
         $userData->setImage(null);
         $userData->setIdUser($registeredUser);
         $doctrine->getRepository(UserData::class)->addUserData($userData);
-
+        $bus->dispatch(new RegisterConfirmation($user));
         return $this->json(['message' =>'Registered Successfully']);
     }
     #[Route('/change_password',name:'change_password', methods: 'POST')]
