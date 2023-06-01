@@ -33,7 +33,11 @@ Everest is a ToDo Web application which is helping with staying organised.
 - Deleting account
 
 ## Screenshots
-
+![logowanie](https://github.com/leronkz/Everest/assets/41147218/1e49dbb7-10a8-492c-a3ce-69fdc78bf746)
+![main](https://github.com/leronkz/Everest/assets/41147218/242a2872-7983-4611-b9d8-29de47492be3)
+![edycja](https://github.com/leronkz/Everest/assets/41147218/e13d7165-25c8-47af-9441-3e644023a713)
+![settings](https://github.com/leronkz/Everest/assets/41147218/fbb3282d-c08f-48d3-b4d4-d351da54e404)
+![account](https://github.com/leronkz/Everest/assets/41147218/04c3aad3-890d-4423-81dd-4fa5b4825f3d)
 
 ## Usage
 - Register with your email 
