@@ -17,7 +17,7 @@ Everest is a ToDo Web application which is helping with staying organised.
 - PHP 8.1
 - Symfony 6.2
 - MySQL
-
+- RabbitMQ
 
 ## Features
 - Creating account
